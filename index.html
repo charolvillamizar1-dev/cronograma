@@ -3,677 +3,288 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Panel Universitario UIS - Regencia de Farmacia</title>
+    <title>Cronograma Académico - Regencia de Farmacia UIS</title>
     <style>
         :root {
-            --bg-main: #f0f4f8;
+            --bg-main: #f4f6f9;
             --bg-card: #ffffff;
             --text-main: #2d3748;
-            --primary: #2b6cb0;
-            --primary-light: #ebf8ff;
-            --border-color: #e2e8f0;
+            --primary: #1a365d;
+            --border-color: #cbd5e0;
             
-            /* Colores de las convenciones basadas en las fotos */
-            --color-ah: #edf2f7; /* Gris claro */
-            --color-tp: #fbd38d; /* Naranja/Amarillo */
-            --color-fpi: #e9d8fd; /* Morado */
-            --color-l: #90cdf4; /* Azul */
-            --color-e: #feb2b2; /* Rojo/Rosa */
-            --color-o: #c6f6d5; /* Verde */
-            --color-ss: #e2e8f0;
+            --color-tp: #fbd38d;      /* Naranja */
+            --color-l: #63b3ed;       /* Azul */
+            --color-fpi: #d6bcfa;     /* Morado */
+            --color-o: #c6f6d5;       /* Verde */
+            --color-e: #feb2b2;       /* Rojo */
+            --color-ah: #edf2f7;      /* Gris */
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            padding: 20px;
-            line-height: 1.5;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); padding: 15px; }
 
         header {
-            background: linear-gradient(135deg, #1a365d 0%, #2a4365 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%);
+            color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
         }
+        header h1 { font-size: 20px; font-weight: 700; }
+        header p { font-size: 13px; opacity: 0.9; }
 
-        header h1 { font-size: 24px; margin-bottom: 5px; }
-        header p { font-size: 14px; opacity: 0.9; }
-
-        .layout {
-            display: block;
+        .controls {
+            background: white; padding: 12px 18px; border-radius: 10px; margin-bottom: 20px;
+            display: flex; gap: 15px; align-items: center; flex-wrap: wrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid var(--border-color);
         }
+        select, input { padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e0; font-size: 14px; outline: none; }
+        select:focus, input:focus { border-color: #3182ce; }
 
-        /* Sección de controles superiores */
-        .controls-panel {
-            background: var(--bg-card);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-
-        .controls-panel h3 { margin-bottom: 15px; color: #2c5282; font-size: 16px; }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
-            align-items: end;
-        }
-
-        label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #4a5568; }
-        input, select, textarea {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 14px;
-            background: #f7fafc;
-        }
-        input:focus, select:focus { outline: none; border-color: var(--primary); background: #fff; }
-
-        button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 9px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: background 0.2s;
-        }
-        button:hover { background: #2b6cb0; }
-        button.btn-secondary { background: #718096; }
-        button.btn-secondary:hover { background: #4a5568; }
-
-        /* Contenedor principal del Horario */
+        /* Contenedor de Tabla */
         .schedule-container {
-            background: var(--bg-card);
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            overflow-x: auto;
-            padding: 10px;
+            background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02); overflow-x: auto; padding: 12px; margin-bottom: 25px;
         }
-
-        .schedule-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 4px;
-            min-width: 1200px;
-        }
-
+        .schedule-table { width: 100%; border-collapse: separate; border-spacing: 6px; min-width: 900px; }
         .schedule-table th {
-            background: #edf2f7;
-            padding: 12px 8px;
-            font-size: 13px;
-            font-weight: 700;
-            color: #4a5568;
-            border-radius: 6px;
-            text-align: center;
-            min-width: 110px;
+            background: #e2e8f0; padding: 10px; font-size: 13px; font-weight: 700;
+            color: #2d3748; border-radius: 6px; text-align: center;
         }
-
-        .schedule-table th.subject-header {
-            text-align: left;
-            min-width: 280px;
+        .time-header { background: #2b6cb0 !important; color: white !important; width: 120px; }
+        .time-cell {
+            background: #ebf8ff; font-weight: bold; font-size: 12px; color: #2c5282;
+            text-align: center; vertical-align: middle; border-radius: 6px; padding: 10px; border: 1px solid #bee3f8;
         }
+        td { vertical-align: top; height: 85px; width: 12%; }
 
-        .subject-row td {
-            vertical-align: top;
-            padding: 4px;
-        }
-
-        .subject-info-cell {
-            background: #f7fafc;
-            padding: 10px;
-            border-radius: 8px;
-            border-left: 4px solid #4299e1;
-            font-size: 13px;
-            height: 100%;
-        }
-
-        .subject-title { font-weight: 700; color: #2d3748; margin-bottom: 4px; font-size: 13px; }
-        .subject-meta { font-size: 11px; color: #718096; }
-
-        /* Bloques de clase interactivos */
+        /* Tarjeta de la Clase */
         .class-card {
-            border-radius: 8px;
-            padding: 8px;
-            font-size: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
-            cursor: pointer;
-            position: relative;
-            transition: transform 0.15s, box-shadow 0.15s;
-            border: 1px solid rgba(0,0,0,0.06);
-            margin-bottom: 6px;
-            min-height: 75px;
+            border-radius: 6px; padding: 8px; font-size: 11px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08); position: relative;
+            border: 1px solid rgba(0,0,0,0.1); height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+            font-weight: bold; color: #1a202c; margin-bottom: 4px;
         }
+        .class-time { font-size: 10px; opacity: 0.85; font-weight: normal; margin-top: 2px; }
 
-        .class-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-        }
-
-        /* Estilos de Tipos por color */
-        .type-AH { background-color: var(--color-ah); border-left: 4px solid #718096; }
+        /* Colores por Tipo */
         .type-TP { background-color: var(--color-tp); border-left: 4px solid #dd6b20; }
+        .type-L { background-color: var(--color-l); border-left: 4px solid #2b6cb0; }
         .type-FPI { background-color: var(--color-fpi); border-left: 4px solid #805ad5; }
-        .type-L { background-color: var(--color-l); border-left: 4px solid #3182ce; }
-        .type-E { background-color: var(--color-e); border-left: 4px solid #e53e3e; }
         .type-O { background-color: var(--color-o); border-left: 4px solid #38a169; }
-        .type-SS { background-color: var(--color-ss); border-left: 4px solid #4a5568; }
+        .type-E { background-color: var(--color-e); border-left: 4px solid #e53e3e; }
+        .type-AH { background-color: var(--color-ah); border-left: 4px solid #718096; }
 
-        .class-badge {
-            font-weight: 800;
-            font-size: 11px;
-            display: inline-block;
-            margin-bottom: 3px;
-            text-transform: uppercase;
-        }
-
-        .class-time {
-            font-family: monospace;
-            font-weight: 600;
-            color: #4a5568;
-            margin-bottom: 4px;
-        }
-
-        .card-actions {
-            position: absolute;
-            top: 4px;
-            right: 6px;
-            font-weight: bold;
-            color: #718096;
-            font-size: 14px;
-            padding: 2px 4px;
-            border-radius: 4px;
-        }
-        .card-actions:hover { background: rgba(0,0,0,0.08); }
-
-        .indicators {
-            display: flex;
-            gap: 4px;
-            margin-top: 4px;
-        }
-
-        .ind-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-        .ind-note { background-color: #3182ce; }
-        .ind-task { background-color: #e53e3e; }
-        
-        .status-badge {
-            font-size: 9px;
-            padding: 1px 4px;
-            border-radius: 4px;
-            font-weight: bold;
-            float: right;
-        }
-        .status-asistio { background: #c6f6d5; color: #22543d; }
-        .status-falto { background: #fed7d7; color: #742a2a; }
-        .status-pendiente { background: #edf2f7; color: #4a5568; }
-
-        /* Modales / Ventanas Emergentes */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 15px;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            animation: fadeIn 0.2s ease-out;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-        .modal-header h2 { font-size: 18px; color: #1a365d; }
-        .close-modal { font-size: 24px; cursor: pointer; color: #a0aec0; }
-        .close-modal:hover { color: #4a5568; }
-
-        .convention-box {
-            background: #ebf8ff;
-            border: 1px solid #bee3f8;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            font-size: 13px;
-        }
-
-        /* Sección Leyendas inferiores */
-        .legend-panel {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 25px;
-            border: 1px solid var(--border-color);
-        }
-        .legend-panel h4 { margin-bottom: 12px; color: #2d3748; font-size: 14px; }
-        .legend-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 10px;
-        }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 12px;
-            padding: 8px;
-            border-radius: 6px;
-        }
+        /* Convenciones */
+        .legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; font-size: 12px; }
+        .legend-item { display: flex; align-items: center; gap: 5px; }
+        .legend-color { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Mi Cronograma Universitario Adaptativo</h1>
-    <p>Programa: 82. Tecnología en Regencia de Farmacia — Nivel 1 (Plan 7) — Grupo NA1</p>
+    <div>
+        <h1>Cronograma Organizado por Horas</h1>
+        <p>Tecnología en Regencia de Farmacia - UIS</p>
+    </div>
 </header>
 
-<!-- Panel de Programación / Modificación Rápida -->
-<div class="controls-panel">
-    <h3>🛠️ Programar o Agregar Nueva Actividad / Clase Extra</h3>
-    <form id="activity-form" onsubmit="createNewActivity(event)">
-        <div class="form-grid">
-            <div>
-                <label>Asignatura</label>
-                <select id="form-subject" required>
-                    <option value="27308">INGLES I</option>
-                    <option value="27309">BIOLOGIA</option>
-                    <option value="27311">COMUNICACION ORAL Y ESCRITA</option>
-                    <option value="27312">ANTROPOLOGIA DE LA SALUD</option>
-                    <option value="27313">QUIMICA BASICA</option>
-                    <option value="27316">INTRODUCION A LA FARMACIA</option>
-                </select>
-            </div>
-            <div>
-                <label>Fecha de la Clase</label>
-                <select id="form-date" required>
-                    <option value="Sab 18-Jul">Sab 18-Jul</option>
-                    <option value="Sab 25-Jul">Sab 25-Jul</option>
-                    <option value="Sab 01-Ago">Sab 01-Ago</option>
-                    <option value="Vie 07-Ago">Vie 07-Ago</option>
-                    <option value="Sab 08-Ago">Sab 08-Ago</option>
-                    <option value="Lun 10-Ago">Lun 10-Ago</option>
-                    <option value="Vie 14-Ago">Vie 14-Ago</option>
-                    <option value="Sab 15-Ago">Sab 15-Ago</option>
-                    <option value="Sab 22-Ago">Sab 22-Ago</option>
-                    <option value="Lun 24-Ago">Lun 24-Ago</option>
-                    <option value="Sab 29-Ago">Sab 29-Ago</option>
-                    <option value="Sab 05-Sep">Sab 05-Sep</option>
-                    <option value="Vie 11-Sep">Vie 11-Sep</option>
-                    <option value="Sab 12-Sep">Sab 12-Sep</option>
-                    <option value="Lun 14-Sep">Lun 14-Sep</option>
-                    <option value="Sab 19-Sep">Sab 19-Sep</option>
-                    <option value="Lun 21-Sep">Lun 21-Sep</option>
-                    <option value="Vie 25-Sep">Vie 25-Sep</option>
-                    <option value="Sab 26-Sep">Sab 26-Sep</option>
-                    <option value="Sab 03-Oct">Sab 03-Oct</option>
-                </select>
-            </div>
-            <div>
-                <label>Tipo (Modalidad)</label>
-                <select id="form-type" required>
-                    <option value="TP">TP (Tutoría Presencial UIS)</option>
-                    <option value="AH">AH (Aula Híbrida ir a UIS)</option>
-                    <option value="FPI">FPI (Trabajo Colaborativo/Investigación)</option>
-                    <option value="L">L-Presencial (Laboratorio)</option>
-                    <option value="E">E (Examen)</option>
-                    <option value="O">O (Opcional)</option>
-                    <option value="SS">SS-ST (Sustentación)</option>
-                    <option value="TR">TR (Tutoría Remota Zoom)</option>
-                </select>
-            </div>
-            <div>
-                <label>Horario (Ej: 08:00-10:00)</label>
-                <input type="text" id="form-time" placeholder="08:00-10:00" required>
-            </div>
-            <div>
-                <label>Identificador (Ej: #1, #2)</label>
-                <input type="text" id="form-label" placeholder="#1" required>
-            </div>
-            <div>
-                <button type="submit" style="width: 100%;">Añadir al Mapa</button>
-            </div>
-        </div>
-    </form>
+<div class="controls">
+    <label for="week-select"><strong>📅 Seleccionar Semana:</strong></label>
+    <select id="week-select" onchange="renderWeek()"></select>
 </div>
 
-<!-- Tabla Cronograma Principal -->
 <div class="schedule-container">
-    <table class="schedule-table" id="main-schedule-table">
+    <table class="schedule-table">
         <thead>
-            <tr id="table-headers">
-                <th class="subject-header">Asignatura / Docente</th>
-                <!-- Encabezados cargados dinámicamente -->
+            <tr id="table-header">
+                <th class="time-header">Franja Horaria</th>
+                <!-- Se llena con JS -->
             </tr>
         </thead>
-        <tbody id="table-body">
-            <!-- Filas cargadas dinámicamente -->
+        <tbody id="schedule-body">
+            <!-- Se llena con JS -->
         </tbody>
     </table>
 </div>
 
-<!-- Leyendas Informativas Permanentes -->
-<div class="legend-panel">
-    <h4>💡 Significado de las Convenciones de Horario (Haz clic en cualquier bloque para ver detalles)</h4>
-    <div class="legend-grid">
-        <div class="legend-item type-TP"><strong>TP:</strong> Tutoría presencial en la U.I.S.</div>
-        <div class="legend-item type-TR"><strong>TR:</strong> Tutoría remota en casa por Zoom.</div>
-        <div class="legend-item type-AH"><strong>AH:</strong> Aula híbrida (Asistir físicamente a la U.I.S.).</div>
-        <div class="legend-item type-FPI"><strong>FPI:</strong> Formación Para la Investigación / Trabajo Colaborativo (Confirmar con profesor).</div>
-        <div class="legend-item type-SS"><strong>SS-ST:</strong> Socialización o Sustentación.</div>
-        <div class="legend-item type-E"><strong>E1 o E:</strong> Sesión de Examen.</div>
-        <div class="legend-item type-O"><strong>O1 u O2:</strong> Actividad Opcional.</div>
-        <div class="legend-item type-L"><strong>L-Presencial:</strong> Práctica de Laboratorio en Sede.</div>
-    </div>
-</div>
-
-<!-- MODAL DE EDICIÓN Y DETALLES -->
-<div class="modal-overlay" id="class-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 id="modal-subject-name">Detalles de la Clase</h2>
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-        </div>
-        
-        <div class="convention-box">
-            <strong id="modal-convention-title">Tipo: TP</strong>
-            <p id="modal-convention-desc">Cargando definición...</p>
-        </div>
-
-        <form id="modal-edit-form" onsubmit="saveModalChanges(event)">
-            <input type="hidden" id="modal-class-id">
-            
-            <div style="margin-bottom: 12px;">
-                <label>Profesor Asignado</label>
-                <input type="text" id="modal-professor" readonly style="background:#e2e8f0; color:#4a5568;">
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
-                <div>
-                    <label>Cambiar Fecha (Mover Día)</label>
-                    <select id="modal-date-select">
-                        <!-- Mismas fechas -->
-                    </select>
-                </div>
-                <div>
-                    <label>Cambiar Horario (Mover Hora)</label>
-                    <input type="text" id="modal-time-input">
-                </div>
-            </div>
-
-            <div style="margin-bottom: 12px;">
-                <label>Control de Asistencia</label>
-                <select id="modal-attendance">
-                    <option value="pendiente">⏳ Pendiente / Próxima</option>
-                    <option value="asistio">✅ Asistí a Clase</option>
-                    <option value="falto">❌ No pude asistir</option>
-                </select>
-            </div>
-
-            <div style="margin-bottom: 12px;">
-                <label>Bloc de Notas (¿Qué te costó comprender? / Avisos)</label>
-                <textarea id="modal-notes" rows="2" placeholder="Escribe aquí dudas, si movieron el salón, o conceptos difíciles..."></textarea>
-            </div>
-
-            <div style="margin-bottom: 15px;">
-                <label>Tareas o Actividades Dejadas Hoy</label>
-                <input type="text" id="modal-tasks" placeholder="Ej: Investigar taller pág 5 para el próximo sábado">
-            </div>
-
-            <div style="display: flex; justify-content: space-between; gap: 10px;">
-                <button type="button" class="btn-secondary" onclick="deleteClass()">Eliminar Clase</button>
-                <button type="submit">Guardar Cambios</button>
-            </div>
-        </form>
+<div class="controls" style="flex-direction: column; align-items: flex-start;">
+    <strong>🎨 Convenciones de Clases:</strong>
+    <div class="legend">
+        <div class="legend-item"><div class="legend-color" style="background:var(--color-tp)"></div> Tutoría Presencial (TP)</div>
+        <div class="legend-item"><div class="legend-color" style="background:var(--color-l)"></div> Laboratorio Presencial (L)</div>
+        <div class="legend-item"><div class="legend-color" style="background:var(--color-fpi)"></div> Formación Investigación (FPI)</div>
+        <div class="legend-item"><div class="legend-color" style="background:var(--color-o)"></div> Orientación / Remoto (O)</div>
+        <div class="legend-item"><div class="legend-color" style="background:var(--color-e)"></div> Examen / Evaluaciones (E)</div>
+        <div class="legend-item"><div class="legend-color" style="background:var(--color-ah)"></div> Aula Híbrida / Asesorías (AH/EAH/OAH/S-S)</div>
     </div>
 </div>
 
 <script>
-    // Diccionario oficial de convenciones de la UIS (Foto 4)
-    const CONVENCIONES = {
-        'TP': 'Significa tutoría presencial en la U.I.S. Debes desplazarte físicamente al campus en el horario fijado.',
-        'TR': 'Significa tutoría remota en casa por la plataforma Zoom. Revisa el link de conexión provisto por tu profesor.',
-        'AH': 'Significa Aula Híbrida. Debes ir físicamente a las instalaciones de la U.I.S. asignadas para la interconexión.',
-        'FPI': 'Significa Formación Para la Investigación o Trabajo Colaborativo. Usualmente requiere ir a la U.I.S., se recomienda confirmar directamente con los profesores.',
-        'SS': 'Socialización o Sustentación de proyectos o trabajos frente al grupo.',
-        'ST': 'Socialización o Sustentación de proyectos.',
-        'E': 'Sesión destinada a la presentación de Examen o evaluación calificada.',
-        'O': 'Sesión Opcional de reforzamiento o asesoría adicional.',
-        'L': 'Práctica obligatoria de Laboratorio Presencial. Requiere protocolos de bioseguridad y asistencia en sede.'
-    };
-
-    // Estructura maestra de asignaturas basadas en las fotos de tu matrícula
-    const ASIGNATURAS = {
-        "27308": { nombre: "INGLES I", profesor: "Bibiana Catherine Figueredo Montana" },
-        "27309": { nombre: "BIOLOGIA", profesor: "Alba Lucia Arciniegas Vargas" },
-        "27311": { nombre: "COMUNICACION ORAL Y ESCRITA", profesor: "Lissette Raquel Ramirez Rojas" },
-        "27312": { nombre: "ANTROPOLOGIA DE LA SALUD", profesor: "Jhon Sebastian Sanchez Alzate" },
-        "27313": { nombre: "QUIMICA BASICA", profesor: "Kathy Milena Orozco Polanco" },
-        "27316": { nombre: "INTRODUCION A LA FARMACIA", profesor: "Edilsa Beltran De Cuellar" }
-    };
-
-    // Columnas de tiempo ordenadas cronológicamente según tus fotos
-    const FECHAS = [
-        "Sab 18-Jul", "Sab 25-Jul", "Sab 01-Ago", "Vie 07-Ago", "Sab 08-Ago", "Lun 10-Ago", 
-        "Vie 14-Ago", "Sab 15-Ago", "Sab 22-Ago", "Lun 24-Ago", "Sab 29-Ago", "Sab 05-Sep", 
-        "Vie 11-Sep", "Sab 12-Sep", "Lun 14-Sep", "Sab 19-Sep", "Lun 21-Sep", "Vie 25-Sep", 
-        "Sab 26-Sep", "Sab 03-Oct"
+    const semanas = [
+        { id: 1, name: "Semana 1 (01-Ago a 08-Ago)", dias: ["Vie 31-Jul", "Sab 01-Ago", "Dom 02-Ago", "Lun 03-Ago", "Mar 04-Ago", "Mie 05-Ago", "Jue 06-Ago", "Vie 07-Ago", "Sab 08-Ago"] },
+        { id: 2, name: "Semana 2 (15-Ago a 22-Ago)", dias: ["Sab 15-Ago", "Dom 16-Ago", "Lun 17-Ago", "Mar 18-Ago", "Mie 19-Ago", "Jue 20-Ago", "Vie 21-Ago", "Sab 22-Ago"] },
+        { id: 3, name: "Semana 3 (29-Ago a 05-Sep)", dias: ["Sab 29-Ago", "Dom 30-Ago", "Lun 31-Ago", "Mar 01-Sep", "Mie 02-Sep", "Jue 03-Sep", "Vie 04-Sep", "Sab 05-Sep"] },
+        { id: 4, name: "Semana 4 (12-Sep a 19-Sep)", dias: ["Sab 12-Sep", "Dom 13-Sep", "Lun 14-Sep", "Mar 15-Sep", "Mie 16-Sep", "Jue 17-Sep", "Vie 18-Sep", "Sab 19-Sep"] },
+        { id: 5, name: "Semana 5 (25-Sep a 03-Oct)", dias: ["Vie 25-Sep", "Sab 26-Sep", "Dom 27-Sep", "Lun 28-Sep", "Mar 29-Sep", "Mie 30-Sep", "Jue 01-Oct", "Vie 02-Oct", "Sab 03-Oct"] },
+        { id: 6, name: "Semana 6 (10-Oct a 17-Oct)", dias: ["Sab 10-Oct", "Dom 11-Oct", "Lun 12-Oct", "Mar 13-Oct", "Mie 14-Oct", "Jue 15-Oct", "Vie 16-Oct", "Sab 17-Oct"] },
+        { id: 7, name: "Semana 7 (24-Oct a 31-Oct)", dias: ["Sab 24-Oct", "Dom 25-Oct", "Lun 26-Oct", "Mar 27-Oct", "Mie 28-Oct", "Jue 29-Oct", "Vie 30-Oct", "Sab 31-Oct"] },
+        { id: 8, name: "Semana 8 (07-Nov a 14-Nov)", dias: ["Sab 07-Nov", "Dom 08-Nov", "Lun 09-Nov", "Mar 10-Nov", "Mie 11-Nov", "Jue 12-Nov", "Vie 13-Nov", "Sab 14-Nov"] },
+        { id: 9, name: "Semana 9 (20-Nov a 28-Nov)", dias: ["Vie 20-Nov", "Sab 21-Nov", "Dom 22-Nov", "Lun 23-Nov", "Mar 24-Nov", "Mie 25-Nov", "Jue 26-Nov", "Vie 27-Nov", "Sab 28-Nov"] }
     ];
 
-    // Datos iniciales idénticos a los bloques de tus capturas de pantalla
-    const CLASES_INICIALES = [
-        // Fila 1: Ingles I
-        { id: "ing-1", subjectId: "27308", date: "Vie 07-Ago", type: "AH", label: "AH #1", time: "14:00-16:00" },
-        { id: "ing-2", subjectId: "27308", date: "Sab 08-Ago", type: "AH", label: "AH #2", time: "14:00-16:00" },
-        { id: "ing-3", subjectId: "27308", date: "Vie 14-Ago", type: "AH", label: "AH #3", time: "16:00-18:00" },
-        { id: "ing-4", subjectId: "27308", date: "Sab 15-Ago", type: "AH", label: "AH #4", time: "14:00-16:00" },
-        { id: "ing-5", subjectId: "27308", date: "Lun 24-Ago", type: "AH", label: "AH #5", time: "06:00-08:00" },
-        { id: "ing-6", subjectId: "27308", date: "Sab 05-Sep", type: "SS", label: "S-S Aula Hibrida #1", time: "10:00-12:00" },
-        { id: "ing-7", subjectId: "27308", date: "Vie 11-Sep", type: "E", label: "EAH #1", time: "12:00-14:00" },
-        { id: "ing-8", subjectId: "27308", date: "Lun 14-Sep", type: "AH", label: "OAH #1", time: "10:00-12:00" },
-
-        // Fila 2: Biologia
-        { id: "bio-1", subjectId: "27309", date: "Sab 01-Ago", type: "TP", label: "TP #1", time: "08:00-10:00" },
-        { id: "bio-2", subjectId: "27309", date: "Vie 07-Ago", type: "TP", label: "TP #2", time: "08:00-10:00" },
-        { id: "bio-3", subjectId: "27309", date: "Lun 10-Ago", type: "L", label: "L-Presencial #1", time: "06:00-10:00" },
-        { id: "bio-4", subjectId: "27309", date: "Vie 14-Ago", type: "TP", label: "TP #3", time: "06:00-08:00" },
-        { id: "bio-5", subjectId: "27309", date: "Sab 15-Ago", type: "L", label: "L-Presencial #2", time: "06:00-10:00" },
-        { id: "bio-6", subjectId: "27309", date: "Sab 22-Ago", type: "TP", label: "TP #4", time: "10:00-12:00" },
-        { id: "bio-7", subjectId: "27309", date: "Sab 29-Ago", type: "FPI", label: "FPI-Presencial #1", time: "10:00-12:00" },
-        { id: "bio-8", subjectId: "27309", date: "Sab 05-Sep", type: "L", label: "L-Presencial #3", time: "06:00-10:00" },
-        { id: "bio-9", subjectId: "27309", date: "Sab 05-Sep", type: "E", label: "E #1", time: "12:00-13:00" },
-        { id: "bio-10", subjectId: "27309", date: "Sab 12-Sep", type: "O", label: "O #1", time: "12:00-13:00" },
-        { id: "bio-11", subjectId: "27309", date: "Lun 14-Sep", type: "TP", label: "TP #5", time: "06:00-08:00" },
-        { id: "bio-12", subjectId: "27309", date: "Sab 19-Sep", type: "L", label: "L-Presencial #4", time: "10:00-14:00" },
-        { id: "bio-13", subjectId: "27309", date: "Lun 21-Sep", type: "TP", label: "TP #6", time: "06:00-08:00" },
-        { id: "bio-14", subjectId: "27309", date: "Vie 25-Sep", type: "TP", label: "TP #7", time: "06:00-08:00" },
-        { id: "bio-15", subjectId: "27309", date: "Vie 25-Sep", type: "FPI", label: "FPI-Presencial #2", time: "08:00-10:00" },
-        { id: "bio-16", subjectId: "27309", date: "Sab 26-Sep", type: "E", label: "E #2", time: "06:00-07:00" },
-
-        // Fila 3: Comunicacion Oral y Escrita
-        { id: "com-1", subjectId: "27311", date: "Sab 08-Ago", type: "TP", label: "TP #1", time: "10:00-12:00" },
-        { id: "com-2", subjectId: "27311", date: "Vie 14-Ago", type: "FPI", label: "FPI-Presencial #1", time: "10:00-12:00" },
-        { id: "com-3", subjectId: "27311", date: "Sab 15-Ago", type: "TP", label: "TP #2", time: "10:00-12:00" },
-        { id: "com-4", subjectId: "27311", date: "Sab 22-Ago", type: "TP", label: "TP #3", time: "08:00-10:00" },
-        { id: "com-5", subjectId: "27311", date: "Lun 24-Ago", type: "TP", label: "TP #4", time: "08:00-10:00" },
-        { id: "com-6", subjectId: "27311", date: "Sab 29-Ago", type: "FPI", label: "FPI-Presencial #2", time: "10:00-12:00" },
-        { id: "com-7", subjectId: "27311", date: "Sab 05-Sep", type: "TP", label: "TP #5", time: "16:00-18:00" },
-        { id: "com-8", subjectId: "27311", date: "Vie 11-Sep", type: "TP", label: "TP #6", time: "08:00-10:00" },
-        { id: "com-9", subjectId: "27311", date: "Sab 12-Sep", type: "TP", label: "TP #7", time: "08:00-10:00" },
-        { id: "com-10", subjectId: "27311", date: "Lun 14-Sep", type: "TP", label: "TP #8", time: "08:00-10:00" },
-        { id: "com-11", subjectId: "27311", date: "Sab 19-Sep", type: "E", label: "E #1", time: "12:00-13:00" },
-        { id: "com-12", subjectId: "27311", date: "Lun 21-Sep", type: "O", label: "O #1", time: "12:00-13:00" },
-
-        // Fila 4: Antropologia de la Salud
-        { id: "ant-1", subjectId: "27312", date: "Vie 07-Ago", type: "AH", label: "AH #1", time: "06:00-08:00" },
-        { id: "ant-2", subjectId: "27312", date: "Sab 08-Ago", type: "AH", label: "AH #2", time: "06:00-08:00" },
-        { id: "ant-3", subjectId: "27312", date: "Lun 10-Ago", type: "AH", label: "AH #3", time: "10:00-12:00" },
-        { id: "ant-4", subjectId: "27312", date: "Vie 14-Ago", type: "AH", label: "AH #4", time: "14:00-16:00" },
-        { id: "ant-5", subjectId: "27312", date: "Sab 15-Ago", type: "AH", label: "AH #5", time: "12:00-14:00" },
-        { id: "ant-6", subjectId: "27312", date: "Sab 22-Ago", type: "AH", label: "AH #6", time: "12:00-14:00" },
-        { id: "ant-7", subjectId: "27312", date: "Lun 24-Ago", type: "AH", label: "AH #7", time: "10:00-12:00" },
-
-        // Fila 5: Quimica Basica
-        { id: "qui-1", subjectId: "27313", date: "Sab 01-Ago", type: "TP", label: "TP #1", time: "06:00-08:00" },
-        { id: "qui-2", subjectId: "27313", date: "Lun 10-Ago", type: "L", label: "L-Presencial #1", time: "14:00-18:00" },
-        { id: "qui-3", subjectId: "27313", date: "Vie 14-Ago", type: "FPI", label: "FPI-Presencial #1", time: "10:00-12:00" },
-        { id: "qui-4", subjectId: "27313", date: "Sab 15-Ago", type: "TP", label: "TP #2", time: "16:00-18:00" },
-        { id: "qui-5", subjectId: "27313", date: "Sab 22-Ago", type: "L", label: "L-Presencial #2", time: "14:00-18:00" },
-        { id: "qui-6", subjectId: "27313", date: "Lun 24-Ago", type: "E", label: "E #1", time: "13:00-14:00" },
-        { id: "qui-7", subjectId: "27313", date: "Lun 24-Ago", type: "TP", label: "TP #3", time: "14:00-16:00" },
-        { id: "qui-8", subjectId: "27313", date: "Sab 29-Ago", type: "FPI", label: "FPI-Presencial #2", time: "10:00-12:00" },
-        { id: "qui-9", subjectId: "27313", date: "Sab 29-Ago", type: "TP", label: "TP #4", time: "14:00-16:00" },
-        { id: "qui-10", subjectId: "27313", date: "Sab 05-Sep", type: "L", label: "L-Presencial #3", time: "14:00-18:00" },
-        { id: "qui-11", subjectId: "27313", date: "Vie 11-Sep", type: "TP", label: "TP #5", time: "16:00-18:00" },
-        { id: "qui-12", subjectId: "27313", date: "Sab 12-Sep", type: "L", label: "L-Presencial #4", time: "14:00-18:00" },
-        { id: "qui-13", subjectId: "27313", date: "Lun 14-Sep", type: "TP", label: "TP #6", time: "14:00-16:00" },
-        { id: "qui-14", subjectId: "27313", date: "Sab 19-Sep", type: "E", label: "E #2", time: "16:00-17:00" },
-        { id: "qui-15", subjectId: "27313", date: "Vie 25-Sep", type: "FPI", label: "FPI-Presencial #3", time: "08:00-10:00" },
-        { id: "qui-16", subjectId: "27313", date: "Vie 25-Sep", type: "O", label: "O #1", time: "13:00-14:00" },
-
-        // Fila 6: Introduccion a la Farmacia
-        { id: "far-1", subjectId: "27316", date: "Vie 07-Ago", type: "TP", label: "TP #1", time: "10:00-12:00" },
-        { id: "far-2", subjectId: "27316", date: "Sab 08-Ago", type: "TP", label: "TP #2", time: "08:00-10:00" },
-        { id: "far-3", subjectId: "27316", date: "Vie 14-Ago", type: "TP", label: "TP #3", time: "08:00-10:00" },
-        { id: "far-4", subjectId: "27316", date: "Vie 14-Ago", type: "FPI", label: "FPI-Presencial #1", time: "10:00-12:00" },
-        { id: "far-5", subjectId: "27316", date: "Sab 22-Ago", type: "TP", label: "TP #4", time: "06:00-08:00" },
-        { id: "far-6", subjectId: "27316", date: "Lun 24-Ago", type: "TP", label: "TP #5", time: "16:00-18:00" },
-        { id: "far-7", subjectId: "27316", date: "Sab 29-Ago", type: "FPI", label: "FPI-Presencial #2", time: "10:00-12:00" },
-        { id: "far-8", subjectId: "27316", date: "Sab 29-Ago", type: "TP", label: "TP #6", time: "12:00-14:00" },
-        { id: "far-9", subjectId: "27316", date: "Sab 05-Sep", type: "TP", label: "TP #7", time: "14:00-16:00" },
-        { id: "far-10", subjectId: "27316", date: "Sab 12-Sep", type: "TP", label: "TP #8", time: "16:00-18:00" },
-        { id: "far-11", subjectId: "27316", date: "Vie 25-Sep", type: "FPI", label: "FPI-Presencial #3", time: "08:00-10:00" },
-        { id: "far-12", subjectId: "27316", date: "Vie 25-Sep", type: "E", label: "E #1", time: "12:00-13:00" },
-        { id: "far-13", subjectId: "27316", date: "Sab 03-Oct", type: "O", label: "O #2", time: "13:00-14:00" }
+    const franjas = [
+        "06:00-08:00",
+        "08:00-10:00",
+        "10:00-12:00",
+        "12:00-14:00",
+        "14:00-16:00",
+        "16:00-18:00",
+        "Especiales / Noche"
     ];
 
-    // Cargar desde LocalStorage o inicializar
-    let clases = JSON.parse(localStorage.getItem('uis_schedule_clases')) || CLASES_INICIALES;
+    // Base de datos de todas las clases extraídas de tus capturas
+    const eventos = [
+        // Semana 1
+        { dia: "Sab 01-Ago", hora: "06:00-08:00", titulo: "TP #1", tipo: "TP" },
+        { dia: "Sab 01-Ago", hora: "08:00-10:00", titulo: "TP #1", tipo: "TP" },
+        { dia: "Sab 08-Ago", hora: "06:00-08:00", titulo: "AH #1", tipo: "AH" },
+        { dia: "Sab 08-Ago", hora: "08:00-10:00", titulo: "TP #2", tipo: "TP" },
+        { dia: "Sab 08-Ago", hora: "10:00-12:00", titulo: "TP #1", tipo: "TP" },
+        { dia: "Sab 08-Ago", hora: "14:00-16:00", titulo: "AH #1", tipo: "AH" },
 
-    // Inicializar la tabla al cargar la página
-    document.addEventListener("DOMContentLoaded", () => {
-        setupDateSelects();
-        renderHeaders();
-        renderTable();
-    });
+        // Semana 2
+        { dia: "Sab 15-Ago", hora: "06:00-08:00", titulo: "AH #2", tipo: "AH" },
+        { dia: "Sab 15-Ago", hora: "08:00-10:00", titulo: "TP #2", tipo: "TP" },
+        { dia: "Sab 15-Ago", hora: "10:00-12:00", titulo: "TP #1", tipo: "TP" },
+        { dia: "Sab 15-Ago", hora: "14:00-16:00", titulo: "AH #2", tipo: "AH" },
+        { dia: "Sab 22-Ago", hora: "06:00-08:00", titulo: "L-Presencial #1", tipo: "L" },
+        { dia: "Sab 22-Ago", hora: "08:00-10:00", titulo: "L-Presencial #1", tipo: "L" },
+        { dia: "Sab 22-Ago", hora: "10:00-12:00", titulo: "AH #3", tipo: "AH" },
+        { dia: "Sab 22-Ago", hora: "14:00-16:00", titulo: "L-Presencial #1", tipo: "L" },
+        { dia: "Sab 22-Ago", hora: "16:00-18:00", titulo: "L-Presencial #1", tipo: "L" },
 
-    function setupDateSelects() {
-        const modalSelect = document.getElementById("modal-date-select");
-        FECHAS.forEach(f => {
-            let opt = document.createElement("option");
-            opt.value = f;
-            opt.textContent = f;
-            modalSelect.appendChild(opt);
+        // Semana 3
+        { dia: "Sab 29-Ago", hora: "06:00-08:00", titulo: "TP #3", tipo: "TP" },
+        { dia: "Sab 29-Ago", hora: "08:00-10:00", titulo: "TP #3", tipo: "TP" },
+        { dia: "Sab 29-Ago", hora: "10:00-12:00", titulo: "FPI-Presencial #1", tipo: "FPI" },
+        { dia: "Sab 29-Ago", hora: "14:00-16:00", titulo: "AH #4", tipo: "AH" },
+        { dia: "Sab 29-Ago", hora: "16:00-18:00", titulo: "AH #3", tipo: "AH" },
+        { dia: "Sab 05-Sep", hora: "06:00-08:00", titulo: "L-Presencial #2", tipo: "L" },
+        { dia: "Sab 05-Sep", hora: "08:00-10:00", titulo: "L-Presencial #2", tipo: "L" },
+        { dia: "Sab 05-Sep", hora: "10:00-12:00", titulo: "TP #2", tipo: "TP" },
+        { dia: "Sab 05-Sep", hora: "12:00-14:00", titulo: "AH #5", tipo: "AH" },
+        { dia: "Sab 05-Sep", hora: "14:00-16:00", titulo: "AH #4", tipo: "AH" },
+        { dia: "Sab 05-Sep", hora: "16:00-18:00", titulo: "TP #2", tipo: "TP" },
+
+        // Semana 4
+        { dia: "Sab 12-Sep", hora: "06:00-08:00", titulo: "TP #4", tipo: "TP" },
+        { dia: "Sab 12-Sep", hora: "08:00-10:00", titulo: "TP #3", tipo: "TP" },
+        { dia: "Sab 12-Sep", hora: "10:00-12:00", titulo: "TP #4", tipo: "TP" },
+        { dia: "Sab 12-Sep", hora: "12:00-14:00", titulo: "AH #6", tipo: "AH" },
+        { dia: "Sab 12-Sep", hora: "14:00-16:00", titulo: "L-Presencial #2", tipo: "L" },
+        { dia: "Sab 12-Sep", hora: "16:00-18:00", titulo: "L-Presencial #2", tipo: "L" },
+        { dia: "Sab 19-Sep", hora: "06:00-08:00", titulo: "AH #5", tipo: "AH" },
+        { dia: "Sab 19-Sep", hora: "08:00-10:00", titulo: "TP #4", tipo: "TP" },
+        { dia: "Sab 19-Sep", hora: "10:00-12:00", titulo: "AH #7", tipo: "AH" },
+        { dia: "Sab 19-Sep", hora: "12:00-14:00", titulo: "E #1 (13:00-14:00)", tipo: "E" },
+        { dia: "Sab 19-Sep", hora: "14:00-16:00", titulo: "TP #3", tipo: "TP" },
+        { dia: "Sab 19-Sep", hora: "16:00-18:00", titulo: "TP #5", tipo: "TP" },
+
+        // Semana 5
+        { dia: "Vie 25-Sep", hora: "Especiales / Noche", titulo: "O-remoto #1 (19:00-20:00)", tipo: "O" },
+        { dia: "Sab 26-Sep", hora: "10:00-12:00", titulo: "FPI-Presencial #1 / #2", tipo: "FPI" },
+        { dia: "Sab 26-Sep", hora: "12:00-14:00", titulo: "TP #6", tipo: "TP" },
+        { dia: "Sab 26-Sep", hora: "14:00-16:00", titulo: "TP #4", tipo: "TP" },
+        { dia: "Sab 03-Oct", hora: "06:00-08:00", titulo: "L-Presencial #3", tipo: "L" },
+        { dia: "Sab 03-Oct", hora: "08:00-10:00", titulo: "L-Presencial #3", tipo: "L" },
+        { dia: "Sab 03-Oct", hora: "10:00-12:00", titulo: "S-S Aula Híbrida #1", tipo: "AH" },
+        { dia: "Sab 03-Oct", hora: "12:00-14:00", titulo: "E #1 (12:00-13:00)", tipo: "E" },
+        { dia: "Sab 03-Oct", hora: "14:00-16:00", titulo: "TP #7", tipo: "TP" },
+        { dia: "Sab 03-Oct", hora: "16:00-18:00", titulo: "TP #5", tipo: "TP" },
+
+        // Semana 6
+        { dia: "Sab 10-Oct", hora: "08:00-10:00", titulo: "TP #6", tipo: "TP" },
+        { dia: "Sab 10-Oct", hora: "12:00-14:00", titulo: "EAH #1", tipo: "AH" },
+        { dia: "Sab 10-Oct", hora: "14:00-16:00", titulo: "L-Presencial #3", tipo: "L" },
+        { dia: "Sab 10-Oct", hora: "16:00-18:00", titulo: "L-Presencial #3", tipo: "L" },
+        { dia: "Sab 17-Oct", hora: "08:00-10:00", titulo: "TP #7", tipo: "TP" },
+        { dia: "Sab 17-Oct", hora: "12:00-14:00", titulo: "O #1 (12:00-13:00)", tipo: "O" },
+        { dia: "Sab 17-Oct", hora: "16:00-18:00", titulo: "TP #5", tipo: "TP" },
+
+        // Semana 7
+        { dia: "Sab 24-Oct", hora: "06:00-08:00", titulo: "TP #5", tipo: "TP" },
+        { dia: "Sab 24-Oct", hora: "08:00-10:00", titulo: "TP #8", tipo: "TP" },
+        { dia: "Sab 24-Oct", hora: "10:00-12:00", titulo: "OAH #1", tipo: "AH" },
+        { dia: "Sab 24-Oct", hora: "14:00-16:00", titulo: "L-Presencial #4", tipo: "L" },
+        { dia: "Sab 24-Oct", hora: "16:00-18:00", titulo: "L-Presencial #4", tipo: "L" },
+        { dia: "Sab 31-Oct", hora: "10:00-12:00", titulo: "L-Presencial #4", tipo: "L" },
+        { dia: "Sab 31-Oct", hora: "12:00-14:00", titulo: "L-Presencial #4 / E #1", tipo: "E" },
+        { dia: "Sab 31-Oct", hora: "14:00-16:00", titulo: "TP #6", tipo: "TP" },
+        { dia: "Sab 31-Oct", hora: "16:00-18:00", titulo: "TP #8", tipo: "TP" },
+
+        // Semana 8
+        { dia: "Sab 07-Nov", hora: "06:00-08:00", titulo: "TP #6", tipo: "TP" },
+        { dia: "Sab 07-Nov", hora: "12:00-14:00", titulo: "O #1 (12:00-13:00)", tipo: "O" },
+        { dia: "Sab 07-Nov", hora: "16:00-18:00", titulo: "E #2 (16:00-17:00)", tipo: "E" },
+        { dia: "Sab 14-Nov", hora: "06:00-08:00", titulo: "TP #7", tipo: "TP" },
+        { dia: "Sab 14-Nov", hora: "08:00-10:00", titulo: "FPI-Presencial #2 / #3", tipo: "FPI" },
+        { dia: "Sab 14-Nov", hora: "12:00-14:00", titulo: "O #1 / E #1", tipo: "O" },
+
+        // Semana 9
+        { dia: "Vie 20-Nov", hora: "Especiales / Noche", titulo: "O-remoto #1 (20:00-21:00)", tipo: "O" },
+        { dia: "Sab 21-Nov", hora: "06:00-08:00", titulo: "E #2 (06:00-07:00)", tipo: "E" },
+        { dia: "Sab 28-Nov", hora: "12:00-14:00", titulo: "O #2 (13:00-14:00)", tipo: "O" }
+    ];
+
+    function init() {
+        const select = document.getElementById("week-select");
+        semanas.forEach((sem, idx) => {
+            const opt = document.createElement("option");
+            opt.value = sem.id;
+            opt.textContent = sem.name;
+            select.appendChild(opt);
         });
+        renderWeek();
     }
 
-    function renderHeaders() {
-        const headerRow = document.getElementById("table-headers");
-        // Limpiar fechas previas si las hubiera
-        while(headerRow.children.length > 1) {
-            headerRow.removeChild(headerRow.lastChild);
-        }
-        FECHAS.forEach(fecha => {
+    function renderWeek() {
+        const weekId = parseInt(document.getElementById("week-select").value);
+        const sem = semanas.find(s => s.id === weekId);
+
+        // Encabezados
+        const theader = document.getElementById("table-header");
+        theader.innerHTML = '<th class="time-header">Franja Horaria</th>';
+        sem.dias.forEach(d => {
             const th = document.createElement("th");
-            th.innerHTML = fecha.replace(" ", "<br>");
-            headerRow.appendChild(th);
+            th.textContent = d;
+            theader.appendChild(th);
         });
-    }
 
-    function renderTable() {
-        const tbody = document.getElementById("table-body");
+        // Cuerpo
+        const tbody = document.getElementById("schedule-body");
         tbody.innerHTML = "";
 
-        Object.keys(ASIGNATURAS).forEach(subId => {
+        franjas.forEach(f => {
             const tr = document.createElement("tr");
-            tr.className = "subject-row";
+            
+            const tdHora = document.createElement("td");
+            tdHora.className = "time-cell";
+            tdHora.textContent = f;
+            tr.appendChild(tdHora);
 
-            // Primera celda: Detalles de la Asignatura
-            const infoTd = document.createElement("td");
-            infoTd.innerHTML = `
-                <div class="subject-info-cell">
-                    <div class="subject-title">${ASIGNATURAS[subId].nombre}</div>
-                    <div class="subject-meta">Código: ${subId}</div>
-                    <div class="subject-meta">👤 ${ASIGNATURAS[subId].profesor}</div>
-                </div>
-            `;
-            tr.appendChild(infoTd);
-
-            // Generar celdas para cada una de las fechas fijadas
-            FECHAS.forEach(fecha => {
+            sem.dias.forEach(d => {
                 const td = document.createElement("td");
                 
-                // Filtrar clases que correspondan a esta asignatura y este día específico
-                const clasesDelDia = clases.filter(c => c.subjectId === subId && c.date === fecha);
-
-                clasesDelDia.forEach(clase => {
+                // Buscar eventos que coincidan en Día y Hora
+                const evs = eventos.filter(e => e.dia === d && e.hora === f);
+                
+                evs.forEach(ev => {
                     const card = document.createElement("div");
-                    // Detectar tipo base para color (Ej: FPI-Presencial -> FPI)
-                    let baseType = "TP";
-                    if(clase.type) baseType = clase.type;
-                    else {
-                        if(clase.label.includes("AH")) baseType = "AH";
-                        else if(clase.label.includes("FPI")) baseType = "FPI";
-                        else if(clase.label.includes("L-")) baseType = "L";
-                        else if(clase.label.includes("E ")) baseType = "E";
-                        else if(clase.label.includes("O ")) baseType = "O";
-                        else if(clase.label.includes("S-S")) baseType = "SS";
-                    }
-
-                    card.className = `class-card type-${baseType}`;
-                    card.onclick = () => openModal(clase.id);
-
-                    // Indicadores visuales internos
-                    let attendanceStatus = clase.attendance || 'pendiente';
-                    let statusClass = `status-${attendanceStatus}`;
-                    let statusTxt = attendanceStatus === 'asistio' ? '✅' : (attendanceStatus === 'falto' ? '❌' : '⏳');
-
-                    let dotNotes = clase.notes ? '<span class="ind-dot ind-note" title="Tiene anotaciones"></span>' : '';
-                    let dotTasks = clase.tasks ? '<span class="ind-dot ind-task" title="Tarea pendiente"></span>' : '';
-
+                    card.className = `class-card type-${ev.tipo}`;
                     card.innerHTML = `
-                        <div class="card-actions">⋮</div>
-                        <span class="class-badge">${clase.label}</span>
-                        <span class="status-badge ${statusClass}">${statusTxt}</span>
-                        <div class="class-time">🕒 ${clase.time}</div>
-                        <div class="indicators">${dotNotes}${dotTasks}</div>
+                        <div>${ev.titulo}</div>
+                        <div class="class-time">${ev.hora}</div>
                     `;
                     td.appendChild(card);
                 });
@@ -683,113 +294,9 @@
 
             tbody.appendChild(tr);
         });
-
-        // Guardar cambios en LocalStorage automáticamente
-        localStorage.setItem('uis_schedule_clases', JSON.stringify(clases));
     }
 
-    // Lógica del Formulario Superior para Crear Actividades
-    function createNewActivity(e) {
-        e.preventDefault();
-        const subjectId = document.getElementById("form-subject").value;
-        const date = document.getElementById("form-date").value;
-        const type = document.getElementById("form-type").value;
-        const time = document.getElementById("form-time").value;
-        const labelText = document.getElementById("form-label").value;
-
-        const newClass = {
-            id: "custom-" + Date.now(),
-            subjectId: subjectId,
-            date: date,
-            type: type,
-            label: labelText,
-            time: time,
-            attendance: "pendiente",
-            notes: "",
-            tasks: ""
-        };
-
-        clases.push(newClass);
-        renderTable();
-        document.getElementById("activity-form").reset();
-    }
-
-    // Control del Modal Informativo y Editor
-    function openModal(classId) {
-        const clase = clases.find(c => c.id === classId);
-        if (!clase) return;
-
-        const asignación = ASIGNATURAS[clase.subjectId];
-        
-        document.getElementById("modal-class-id").value = clase.id;
-        document.getElementById("modal-subject-name").textContent = asignación.nombre;
-        document.getElementById("modal-professor").value = asignación.profesor;
-        document.getElementById("modal-date-select").value = clase.date;
-        document.getElementById("modal-time-input").value = clase.time;
-        document.getElementById("modal-attendance").value = clase.attendance || "pendiente";
-        document.getElementById("modal-notes").value = clase.notes || "";
-        document.getElementById("modal-tasks").value = clase.tasks || "";
-
-        // Resolver la convención de la imagen 4 automáticamente
-        let baseType = clase.type || "TP";
-        if(!clase.type) {
-            if(clase.label.includes("AH")) baseType = "AH";
-            else if(clase.label.includes("FPI")) baseType = "FPI";
-            else if(clase.label.includes("L-")) baseType = "L";
-            else if(clase.label.includes("E ")) baseType = "E";
-            else if(clase.label.includes("O ")) baseType = "O";
-            else if(clase.label.includes("S-S")) baseType = "SS";
-        }
-
-        document.getElementById("modal-convention-title").textContent = `Modalidad de Asistencia de la sesión: [${baseType}]`;
-        document.getElementById("modal-convention-desc").textContent = CONVENCIONES[baseType] || "Actividad programada regular.";
-
-        document.getElementById("class-modal").style.display = "flex";
-    }
-
-    function closeModal() {
-        document.getElementById("class-modal").style.display = "none";
-    }
-
-    // Guardar cambios aplicados (Mover clase, modificar tareas o notas)
-    function saveModalChanges(e) {
-        e.preventDefault();
-        const id = document.getElementById("modal-class-id").value;
-        const index = clases.findIndex(c => c.id === id);
-
-        if (index !== -1) {
-            clases[index].date = document.getElementById("modal-date-select").value;
-            clases[index].time = document.getElementById("modal-time-input").value;
-            clases[index].attendance = document.getElementById("modal-attendance").value;
-            clases[index].notes = document.getElementById("modal-notes").value;
-            clases[index].tasks = document.getElementById("modal-tasks").value;
-            
-            // Si el usuario movió el horario y no tenía tipo explícito, preservarlo
-            if(!clases[index].type) {
-                if(clases[index].label.includes("AH")) clases[index].type = "AH";
-                else if(clases[index].label.includes("FPI")) clases[index].type = "FPI";
-                else if(clases[index].label.includes("L-")) clases[index].type = "L";
-                else if(clases[index].label.includes("E ")) clases[index].type = "E";
-                else if(clases[index].label.includes("O ")) clases[index].type = "O";
-                else if(clases[index].label.includes("S-S")) clases[index].type = "SS";
-                else clases[index].type = "TP";
-            }
-        }
-
-        renderTable();
-        closeModal();
-    }
-
-    // Eliminar bloque de clase del mapa
-    function deleteClass() {
-        const id = document.getElementById("modal-class-id").value;
-        if(confirm("¿Seguro que deseas eliminar esta clase de tu cronograma?")) {
-            clases = clases.filter(c => c.id !== id);
-            renderTable();
-            closeModal();
-        }
-    }
+    document.addEventListener("DOMContentLoaded", init);
 </script>
-
 </body>
 </html>

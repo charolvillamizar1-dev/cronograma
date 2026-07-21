@@ -6,245 +6,242 @@
     <title>Horario de Clases - Regencia de Farmacia UIS</title>
     <style>
         :root {
-            --bg-main: #f0f4f8;
-            --bg-card: #ffffff;
-            --primary: #1a365d;
-            --accent: #2b6cb0;
-            --text: #2d3748;
-            --border: #e2e8f0;
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --primary: #1e3a8a;
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
             
-            /* Colores de tipo de clase */
-            --color-tp: #feebc8;      --border-tp: #dd6b20;
-            --color-l: #bee3f8;       --border-l: #2b6cb0;
-            --color-fpi: #e9d8fd;     --border-fpi: #805ad5;
-            --color-o: #c6f6d5;       --border-o: #38a169;
-            --color-e: #fed7d7;       --border-e: #e53e3e;
-            --color-ah: #edf2f7;      --border-ah: #718096;
+            /* Colores de tipo */
+            --color-tp: #fef3c7;      --border-tp: #d97706;
+            --color-l: #dbeafe;       --border-l: #2563eb;
+            --color-fpi: #f3e8ff;     --border-fpi: #9333ea;
+            --color-o: #d1fae5;       --border-o: #059669;
+            --color-e: #fee2e2;       --border-e: #dc2626;
+            --color-ah: #f3f4f6;      --border-ah: #4b5563;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text); padding: 15px; max-width: 900px; margin: 0 auto; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg); color: var(--text-dark); padding: 16px; max-width: 600px; margin: 0 auto; }
 
         header {
-            background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%);
-            color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;
+            background: var(--primary); color: white; padding: 18px; border-radius: 12px;
+            text-align: center; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-        header h1 { font-size: 22px; margin-bottom: 5px; }
-        header p { font-size: 14px; opacity: 0.9; }
+        header h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+        header p { font-size: 13px; opacity: 0.9; }
 
-        .search-container {
-            margin-bottom: 20px;
-        }
-        .search-container input {
-            width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border);
-            font-size: 15px; outline: none; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
+        .agenda-container { display: flex; flex-direction: column; gap: 16px; }
 
         /* Tarjeta de Día */
         .day-card {
-            background: var(--bg-card); border-radius: 10px; padding: 16px; margin-bottom: 16px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid var(--border);
+            background: var(--card-bg); border-radius: 12px; padding: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); border: 1px solid var(--border);
         }
-        .day-header {
-            font-size: 16px; font-weight: bold; color: var(--primary); padding-bottom: 10px;
-            border-bottom: 2px solid var(--border); margin-bottom: 12px; display: flex;
+        .day-title {
+            font-size: 16px; font-weight: 700; color: var(--primary); margin-bottom: 12px;
+            padding-bottom: 8px; border-bottom: 2px solid #eff6ff; display: flex;
             justify-content: space-between; align-items: center;
         }
-        .day-badge {
-            background: #ebf8ff; color: #2b6cb0; font-size: 12px; padding: 4px 8px; border-radius: 6px;
+        .day-count {
+            background: #eff6ff; color: var(--primary); font-size: 11px; font-weight: 600;
+            padding: 2px 8px; border-radius: 12px;
         }
 
-        /* Items de Clases */
-        .class-list { display: flex; flex-direction: column; gap: 8px; }
-        .class-item {
-            display: flex; justify-content: space-between; align-items: center; padding: 10px 14px;
-            border-radius: 8px; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s;
-            border-left: 5px solid transparent; background: #fafafa; border: 1px solid var(--border);
-        }
-        .class-item:hover { transform: translateY(-1px); box-shadow: 0 3px 6px rgba(0,0,0,0.08); }
+        /* Lista de Bloques de Hora */
+        .blocks-list { display: flex; flex-direction: column; gap: 8px; }
         
-        .class-info { display: flex; flex-direction: column; gap: 2px; }
-        .class-title { font-size: 14px; font-weight: bold; color: #1a202c; }
-        .class-code { font-size: 12px; color: #718096; }
-        .class-time { font-size: 13px; font-weight: bold; color: #2d3748; white-space: nowrap; }
+        .block-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 14px; border-radius: 8px; border-left: 5px solid transparent;
+            cursor: pointer; transition: background-color 0.2s, transform 0.1s;
+        }
+        .block-item:active { transform: scale(0.99); }
 
-        /* Estilos de tipos */
-        .type-TP { background-color: var(--color-tp); border-left-color: var(--border-tp); }
-        .type-L { background-color: var(--color-l); border-left-color: var(--border-l); }
-        .type-FPI { background-color: var(--color-fpi); border-left-color: var(--border-fpi); }
-        .type-O { background-color: var(--color-o); border-left-color: var(--border-o); }
-        .type-E { background-color: var(--color-e); border-left-color: var(--border-e); }
-        .type-AH { background-color: var(--color-ah); border-left-color: var(--border-ah); }
+        .block-main { display: flex; flex-direction: column; gap: 2px; }
+        .block-subject { font-size: 14px; font-weight: 600; color: var(--text-dark); }
+        .block-sub { font-size: 12px; color: var(--text-muted); }
+        .block-time { font-size: 13px; font-weight: 700; color: var(--text-dark); white-space: nowrap; margin-left: 10px; }
 
-        /* Modal (Ventana de detalles) */
-        .modal-overlay {
+        /* Estilos por tipo */
+        .type-TP { background: var(--color-tp); border-left-color: var(--border-tp); }
+        .type-L { background: var(--color-l); border-left-color: var(--border-l); }
+        .type-FPI { background: var(--color-fpi); border-left-color: var(--border-fpi); }
+        .type-O { background: var(--color-o); border-left-color: var(--border-o); }
+        .type-E { background: var(--color-e); border-left-color: var(--border-e); }
+        .type-AH { background: var(--color-ah); border-left-color: var(--border-ah); }
+
+        /* Modal (Ventana Emergente de Información) */
+        .modal-backdrop {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5); display: none; justify-content: center; align-items: center;
-            z-index: 1000; padding: 15px;
+            background: rgba(0, 0, 0, 0.4); display: none; justify-content: center;
+            align-items: center; z-index: 1000; padding: 20px;
         }
-        .modal-content {
-            background: white; padding: 20px; border-radius: 12px; width: 100%; max-width: 450px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative;
+        .modal-card {
+            background: white; border-radius: 16px; width: 100%; max-width: 400px;
+            padding: 20px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            animation: popIn 0.2s ease-out;
         }
-        .modal-header { font-size: 18px; font-weight: bold; color: var(--primary); margin-bottom: 15px; }
-        .modal-field { margin-bottom: 10px; font-size: 14px; }
-        .modal-field strong { color: #4a5568; display: inline-block; width: 130px; }
-        .close-btn {
-            background: var(--accent); color: white; border: none; padding: 10px; width: 100%;
-            border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 15px;
+        @keyframes popIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
-        .close-btn:hover { background: var(--primary); }
+        .modal-head { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 16px; }
+        .modal-row { margin-bottom: 12px; font-size: 14px; display: flex; flex-direction: column; gap: 2px; }
+        .modal-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .modal-val { font-size: 14px; font-weight: 600; color: var(--text-dark); }
+        
+        .btn-close {
+            margin-top: 18px; width: 100%; padding: 12px; background: var(--primary);
+            color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Horario de Actividades Académicas</h1>
+    <h1>Mi Horario de Clases</h1>
     <p>Tecnología en Regencia de Farmacia - UIS</p>
 </header>
 
-<div class="search-container">
-    <input type="text" id="search-input" placeholder="🔍 Buscar por asignatura, docente o fecha..." oninput="filterSchedule()">
+<div class="agenda-container" id="agenda-list">
+    <!-- Se carga dinámicamente -->
 </div>
 
-<div id="schedule-container">
-    <!-- Se genera dinámicamente con JS -->
-</div>
+<!-- Modal -->
+<div class="modal-backdrop" id="modal-box">
+    <div class="modal-card">
+        <div class="modal-head" id="m-subject">Materia</div>
+        
+        <div class="modal-row">
+            <span class="modal-label">Código de Materia</span>
+            <span class="modal-val" id="m-code">-</span>
+        </div>
+        <div class="modal-row">
+            <span class="modal-label">Docente / Departamento</span>
+            <span class="modal-val" id="m-teacher">-</span>
+        </div>
+        <div class="modal-row">
+            <span class="modal-label">Fecha</span>
+            <span class="modal-val" id="m-date">-</span>
+        </div>
+        <div class="modal-row">
+            <span class="modal-label">Horario</span>
+            <span class="modal-val" id="m-time">-</span>
+        </div>
+        <div class="modal-row">
+            <span class="modal-label">Tipo de Sesión</span>
+            <span class="modal-val" id="m-type">-</span>
+        </div>
 
-<!-- Ventana Emergente (Modal) -->
-<div class="modal-overlay" id="detail-modal">
-    <div class="modal-content">
-        <div class="modal-header" id="m-subject">Nombre de Materia</div>
-        <div class="modal-field"><strong>Fecha:</strong> <span id="m-date"></span></div>
-        <div class="modal-field"><strong>Franja Horaria:</strong> <span id="m-time"></span></div>
-        <div class="modal-field"><strong>Código Materia:</strong> <span id="m-code"></span></div>
-        <div class="modal-field"><strong>Docente:</strong> <span id="m-teacher"></span></div>
-        <div class="modal-field"><strong>Tipo de Sesión:</strong> <span id="m-type"></span></div>
-        <button class="close-btn" onclick="closeModal()">Cerrar</button>
+        <button class="btn-close" onclick="closeModal()">Cerrar</button>
     </div>
 </div>
 
 <script>
-    // Base de datos de actividades
-    const actividades = [
+    // ÚNICAMENTE los días que tienen actividades
+    const diasConClase = [
         {
             fecha: "Sábado, 01 de Agosto",
             clases: [
-                { hora: "06:00 - 08:00", asignatura: "Química Básica", codigo: "22911", docente: "Por Asignar / Departamento de Química", tipo: "TP", modalidad: "Tutoría Presencial #1" },
-                { hora: "08:00 - 10:00", asignatura: "Biología", codigo: "22912", docente: "Por Asignar / Escuela de Biología", tipo: "TP", modalidad: "Tutoría Presencial #1" }
+                { hora: "06:00 - 08:00", materia: "Química Básica", codigo: "22911", docente: "Departamento de Química", tipo: "TP", sesion: "Tutoría Presencial #1" },
+                { hora: "08:00 - 10:00", materia: "Biología", codigo: "22912", docente: "Escuela de Biología", tipo: "TP", sesion: "Tutoría Presencial #1" }
             ]
         },
         {
             fecha: "Sábado, 08 de Agosto",
             clases: [
-                { hora: "06:00 - 08:00", asignatura: "Inglés I", codigo: "22910", docente: "Por Asignar / Instituto de Lenguas", tipo: "AH", modalidad: "Aula Híbrida #1" },
-                { hora: "08:00 - 10:00", asignatura: "Química Básica", codigo: "22911", docente: "Por Asignar / Departamento de Química", tipo: "TP", modalidad: "Tutoría Presencial #2" },
-                { hora: "10:00 - 12:00", asignatura: "Introducción a la Farmacia", codigo: "22913", docente: "Por Asignar / Escuela de Farmacia", tipo: "TP", modalidad: "Tutoría Presencial #1" },
-                { hora: "14:00 - 16:00", asignatura: "Comunicación Oral y Escrita", codigo: "22914", docente: "Por Asignar / Depto. de Humanidades", tipo: "AH", modalidad: "Aula Híbrida #1" }
+                { hora: "06:00 - 08:00", materia: "Inglés I", codigo: "22910", docente: "Instituto de Lenguas", tipo: "AH", sesion: "Aula Híbrida #1" },
+                { hora: "08:00 - 10:00", materia: "Química Básica", codigo: "22911", docente: "Departamento de Química", tipo: "TP", sesion: "Tutoría Presencial #2" },
+                { hora: "10:00 - 12:00", materia: "Introducción a la Farmacia", codigo: "22913", docente: "Escuela de Farmacia", tipo: "TP", sesion: "Tutoría Presencial #1" },
+                { hora: "14:00 - 16:00", materia: "Comunicación Oral y Escrita", codigo: "22914", docente: "Departamento de Humanidades", tipo: "AH", sesion: "Aula Híbrida #1" }
             ]
         },
         {
             fecha: "Sábado, 15 de Agosto",
             clases: [
-                { hora: "06:00 - 08:00", asignatura: "Inglés I", codigo: "22910", docente: "Por Asignar / Instituto de Lenguas", tipo: "AH", modalidad: "Aula Híbrida #2" },
-                { hora: "08:00 - 10:00", asignatura: "Biología", codigo: "22912", docente: "Por Asignar / Escuela de Biología", tipo: "TP", modalidad: "Tutoría Presencial #2" },
-                { hora: "10:00 - 12:00", asignatura: "Antropología de la Salud", codigo: "22915", docente: "Por Asignar / Depto. de Salud", tipo: "TP", modalidad: "Tutoría Presencial #1" },
-                { hora: "14:00 - 16:00", asignatura: "Comunicación Oral y Escrita", codigo: "22914", docente: "Por Asignar / Depto. de Humanidades", tipo: "AH", modalidad: "Aula Híbrida #2" }
+                { hora: "06:00 - 08:00", materia: "Inglés I", codigo: "22910", docente: "Instituto de Lenguas", tipo: "AH", sesion: "Aula Híbrida #2" },
+                { hora: "08:00 - 10:00", materia: "Biología", codigo: "22912", docente: "Escuela de Biología", tipo: "TP", sesion: "Tutoría Presencial #2" },
+                { hora: "10:00 - 12:00", materia: "Antropología de la Salud", codigo: "22915", docente: "Departamento de Salud", tipo: "TP", sesion: "Tutoría Presencial #1" },
+                { hora: "14:00 - 16:00", materia: "Comunicación Oral y Escrita", codigo: "22914", docente: "Departamento de Humanidades", tipo: "AH", sesion: "Aula Híbrida #2" }
             ]
         },
         {
             fecha: "Sábado, 22 de Agosto",
             clases: [
-                { hora: "06:00 - 10:00", asignatura: "Laboratorio de Química Básica", codigo: "22911", docente: "Docente Encargado Laboratorio", tipo: "L", modalidad: "Laboratorio Presencial #1" },
-                { hora: "10:00 - 12:00", asignatura: "Inglés I", codigo: "22910", docente: "Por Asignar / Instituto de Lenguas", tipo: "AH", modalidad: "Aula Híbrida #3" },
-                { hora: "14:00 - 18:00", asignatura: "Laboratorio de Biología", codigo: "22912", docente: "Docente Encargado Laboratorio", tipo: "L", modalidad: "Laboratorio Presencial #1" }
+                { hora: "06:00 - 10:00", materia: "Laboratorio de Química Básica", codigo: "22911", docente: "Docente Encargado Laboratorio", tipo: "L", sesion: "Laboratorio Presencial #1" },
+                { hora: "10:00 - 12:00", materia: "Inglés I", codigo: "22910", docente: "Instituto de Lenguas", tipo: "AH", sesion: "Aula Híbrida #3" },
+                { hora: "14:00 - 18:00", materia: "Laboratorio de Biología", codigo: "22912", docente: "Docente Encargado Laboratorio", tipo: "L", sesion: "Laboratorio Presencial #1" }
             ]
         },
         {
             fecha: "Sábado, 29 de Agosto",
             clases: [
-                { hora: "06:00 - 08:00", asignatura: "Química Básica", codigo: "22911", docente: "Por Asignar / Departamento de Química", tipo: "TP", modalidad: "Tutoría Presencial #3" },
-                { hora: "08:00 - 10:00", asignatura: "Biología", codigo: "22912", docente: "Por Asignar / Escuela de Biología", tipo: "TP", modalidad: "Tutoría Presencial #3" },
-                { hora: "10:00 - 12:00", asignatura: "Formación para la Investigación (FPI)", codigo: "22916", docente: "Coordinación FPI", tipo: "FPI", modalidad: "FPI Presencial #1" },
-                { hora: "14:00 - 16:00", asignatura: "Comunicación Oral y Escrita", codigo: "22914", docente: "Por Asignar / Depto. de Humanidades", tipo: "AH", modalidad: "Aula Híbrida #4" }
+                { hora: "06:00 - 08:00", materia: "Química Básica", codigo: "22911", docente: "Departamento de Química", tipo: "TP", sesion: "Tutoría Presencial #3" },
+                { hora: "08:00 - 10:00", materia: "Biología", codigo: "22912", docente: "Escuela de Biología", tipo: "TP", sesion: "Tutoría Presencial #3" },
+                { hora: "10:00 - 12:00", materia: "Formación para la Investigación (FPI)", codigo: "22916", docente: "Coordinación FPI", tipo: "FPI", sesion: "FPI Presencial #1" },
+                { hora: "14:00 - 16:00", materia: "Comunicación Oral y Escrita", codigo: "22914", docente: "Departamento de Humanidades", tipo: "AH", sesion: "Aula Híbrida #4" }
             ]
         },
         {
             fecha: "Viernes, 25 de Septiembre",
             clases: [
-                { hora: "19:00 - 20:00", asignatura: "Orientación Remota", codigo: "22913", docente: "Coordinación de Programa", tipo: "O", modalidad: "Sesión Remota Virtual" }
+                { hora: "19:00 - 20:00", materia: "Orientación Remota", codigo: "22913", docente: "Coordinación de Programa", tipo: "O", sesion: "Sesión Virtual Remota" }
             ]
         }
     ];
 
-    function renderSchedule(filterText = "") {
-        const container = document.getElementById("schedule-container");
-        container.innerHTML = "";
+    function renderAgenda() {
+        const list = document.getElementById("agenda-list");
+        list.innerHTML = "";
 
-        actividades.forEach(item => {
-            // Filtrar si hay búsqueda
-            const matchesDay = item.fecha.toLowerCase().includes(filterText.toLowerCase());
-            const filteredClasses = item.clases.filter(c => 
-                matchesDay || 
-                c.asignatura.toLowerCase().includes(filterText.toLowerCase()) ||
-                c.docente.toLowerCase().includes(filterText.toLowerCase()) ||
-                c.codigo.toLowerCase().includes(filterText.toLowerCase())
-            );
+        diasConClase.forEach(dia => {
+            const card = document.createElement("div");
+            card.className = "day-card";
 
-            if (filteredClasses.length > 0) {
-                const dayCard = document.createElement("div");
-                dayCard.className = "day-card";
-
-                let classItemsHTML = "";
-                filteredClasses.forEach(c => {
-                    classItemsHTML += `
-                        <div class="class-item type-${c.tipo}" onclick='openModal(${JSON.stringify(c)}, "${item.fecha}")'>
-                            <div class="class-info">
-                                <div class="class-title">${c.asignatura}</div>
-                                <div class="class-code">Código: ${c.codigo} • ${c.modalidad}</div>
-                            </div>
-                            <div class="class-time">${c.hora}</div>
+            let htmlClases = "";
+            dia.clases.forEach(c => {
+                htmlClases += `
+                    <div class="block-item type-${c.tipo}" onclick='showDetails(${JSON.stringify(c)}, "${dia.fecha}")'>
+                        <div class="block-main">
+                            <span class="block-subject">${c.materia}</span>
+                            <span class="block-sub">${c.sesion}</span>
                         </div>
-                    `;
-                });
-
-                dayCard.innerHTML = `
-                    <div class="day-header">
-                        <span>📅 ${item.fecha}</span>
-                        <span class="day-badge">${filteredClasses.length} Sesión(es)</span>
-                    </div>
-                    <div class="class-list">
-                        ${classItemsHTML}
+                        <span class="block-time">${c.hora}</span>
                     </div>
                 `;
-                container.appendChild(dayCard);
-            }
+            });
+
+            card.innerHTML = `
+                <div class="day-title">
+                    <span>📅 ${dia.fecha}</span>
+                    <span class="day-count">${dia.clases.length} clase(s)</span>
+                </div>
+                <div class="blocks-list">
+                    ${htmlClases}
+                </div>
+            `;
+            list.appendChild(card);
         });
     }
 
-    function openModal(clase, fecha) {
-        document.getElementById("m-subject").textContent = clase.asignatura;
+    function showDetails(c, fecha) {
+        document.getElementById("m-subject").textContent = c.materia;
+        document.getElementById("m-code").textContent = c.codigo;
+        document.getElementById("m-teacher").textContent = c.docente;
         document.getElementById("m-date").textContent = fecha;
-        document.getElementById("m-time").textContent = clase.hora;
-        document.getElementById("m-code").textContent = clase.codigo;
-        document.getElementById("m-teacher").textContent = clase.docente;
-        document.getElementById("m-type").textContent = `${clase.modalidad} (${clase.tipo})`;
-        
-        document.getElementById("detail-modal").style.display = "flex";
+        document.getElementById("m-time").textContent = c.hora;
+        document.getElementById("m-type").textContent = c.sesion;
+
+        document.getElementById("modal-box").style.display = "flex";
     }
 
     function closeModal() {
-        document.getElementById("detail-modal").style.display = "none";
+        document.getElementById("modal-box").style.display = "none";
     }
 
-    function filterSchedule() {
-        const text = document.getElementById("search-input").value;
-        renderSchedule(text);
-    }
-
-    // Inicializar
-    document.addEventListener("DOMContentLoaded", () => renderSchedule());
+    document.addEventListener("DOMContentLoaded", renderAgenda);
 </script>
 </body>
 </html>

@@ -3,136 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Horario de Clases - Regencia de Farmacia UIS</title>
+    <title>Horario Escolar - Regencia de Farmacia</title>
     <style>
         :root {
-            --bg: #f3f4f6;
-            --card-bg: #ffffff;
-            --primary: #1e3a8a;
-            --text-dark: #1f2937;
-            --text-muted: #6b7280;
-            --border: #e5e7eb;
+            /* Fondo crema neutro supersuave basado en la imagen */
+            --bg: #faf8f5;
+            --header-bg: #6b5b95; /* Lavanda oscuro sobrio para el título */
+            --panel-bg: #ffffff;
+            --border-color: #e5e0d8;
+            --text-main: #3a3240; /* Texto oscuro cálido descansado */
             
-            /* Colores de tipo */
-            --color-tp: #fef3c7;      --border-tp: #d97706;
-            --color-l: #dbeafe;       --border-l: #2563eb;
-            --color-fpi: #f3e8ff;     --border-fpi: #9333ea;
-            --color-o: #d1fae5;       --border-o: #059669;
-            --color-e: #fee2e2;       --border-e: #dc2626;
-            --color-ah: #f3f4f6;      --border-ah: #4b5563;
+            /* COLORES EXTRAÍDOS EXACTAMENTE DE LA IMAGEN */
+            /* 1. Presencial (TP / L) - Azul Celestito */
+            --bg-tp: #cbe9ed;      --border-tp: #b3dee3;   --text-tp: #1e4d54;
+            /* 2. Aula Híbrida (AH) - Lavanda Pastel */
+            --bg-ah: #e3d7ff;      --border-ah: #d3c2ff;   --text-ah: #432c7a;
+            /* 3. Tutoría Remota / Zoom (TR) - Melocotón / Rosa pálido */
+            --bg-tr: #fcd5ce;      --border-tr: #f7c5bc;   --text-tr: #602d25;
+            /* 4. Exámenes / Evaluación (E) - Verde Menta */
+            --bg-e: #d8f3dc;       --border-e: #b7e4c7;    --text-e: #1b4332;
+            /* 5. Investigación / FPI - Amarillo Crema */
+            --bg-fpi: #fbf3cc;     --border-fpi: #f5e7a9;  --text-fpi: #544917;
+            /* 6. Opcional (O) - Rosa Chicle Suave */
+            --bg-opc: #fcd1ec;     --border-opc: #f8bedf;  --text-opc: #5c1f43;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: var(--bg); color: var(--text-dark); padding: 16px; max-width: 600px; margin: 0 auto; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg); color: var(--text-main); padding: 15px; }
 
-        header {
-            background: var(--primary); color: white; padding: 18px; border-radius: 12px;
-            text-align: center; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        .title-banner {
+            background: var(--header-bg); color: white; text-align: center;
+            padding: 15px; border-radius: 12px; margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(107, 91, 149, 0.15);
         }
-        header h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-        header p { font-size: 13px; opacity: 0.9; }
+        .title-banner h1 { font-size: 22px; letter-spacing: 0.5px; font-weight: 700; }
+        .title-banner p { font-size: 13px; opacity: 0.9; margin-top: 2px; }
 
-        .agenda-container { display: flex; flex-direction: column; gap: 16px; }
+        /* Panel de Convenciones */
+        .conventions-panel {
+            background: #ffffff; border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 12px 16px; margin-bottom: 15px; font-size: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .conventions-title {
+            font-weight: 700; color: var(--header-bg); margin-bottom: 8px; text-transform: uppercase;
+            letter-spacing: 0.5px; font-size: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;
+        }
+        .conventions-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px 12px;
+        }
+        .conv-item { display: flex; gap: 6px; align-items: center; }
+        .conv-badge {
+            font-weight: 700; padding: 4px 8px; border-radius: 6px; font-size: 11px;
+            min-width: 48px; text-align: center; border: 1px solid transparent;
+        }
 
-        /* Tarjeta de Día */
-        .day-card {
-            background: var(--card-bg); border-radius: 12px; padding: 16px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); border: 1px solid var(--border);
-        }
-        .day-title {
-            font-size: 16px; font-weight: 700; color: var(--primary); margin-bottom: 12px;
-            padding-bottom: 8px; border-bottom: 2px solid #eff6ff; display: flex;
-            justify-content: space-between; align-items: center;
-        }
-        .day-count {
-            background: #eff6ff; color: var(--primary); font-size: 11px; font-weight: 600;
-            padding: 2px 8px; border-radius: 12px;
+        /* Estilos de Insignias de Leyenda */
+        .badge-tp { background: var(--bg-tp); border-color: var(--border-tp); color: var(--text-tp); }
+        .badge-ah { background: var(--bg-ah); border-color: var(--border-ah); color: var(--text-ah); }
+        .badge-tr { background: var(--bg-tr); border-color: var(--border-tr); color: var(--text-tr); }
+        .badge-e  { background: var(--bg-e);  border-color: var(--border-e);  color: var(--text-e); }
+        .badge-fpi{ background: var(--bg-fpi);border-color: var(--border-fpi);color: var(--text-fpi); }
+        .badge-opc{ background: var(--bg-opc);border-color: var(--border-opc);color: var(--text-opc); }
+
+        /* Contenedor de la Tabla */
+        .table-wrapper {
+            overflow-x: auto; background: var(--panel-bg);
+            border-radius: 12px; border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
-        /* Lista de Bloques de Hora */
-        .blocks-list { display: flex; flex-direction: column; gap: 8px; }
+        table { border-collapse: collapse; width: 100%; min-width: 1450px; }
+        th, td { border: 1px solid var(--border-color); text-align: center; padding: 5px; }
         
-        .block-item {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 12px 14px; border-radius: 8px; border-left: 5px solid transparent;
-            cursor: pointer; transition: background-color 0.2s, transform 0.1s;
+        th { background: #f0ebe1; color: #4a4052; font-size: 12px; font-weight: 700; padding: 10px; }
+        th.time-col { background: #e3d7ff; color: #432c7a; width: 130px; position: sticky; left: 0; z-index: 2; }
+        
+        td.time-cell {
+            background: #f1ebff; font-weight: 700; font-size: 11px; color: #432c7a;
+            position: sticky; left: 0; z-index: 1; border-right: 2px solid var(--border-color);
+            white-space: nowrap;
         }
-        .block-item:active { transform: scale(0.99); }
 
-        .block-main { display: flex; flex-direction: column; gap: 2px; }
-        .block-subject { font-size: 14px; font-weight: 600; color: var(--text-dark); }
-        .block-sub { font-size: 12px; color: var(--text-muted); }
-        .block-time { font-size: 13px; font-weight: 700; color: var(--text-dark); white-space: nowrap; margin-left: 10px; }
+        /* Celda de Materia */
+        .class-card {
+            border-radius: 8px; padding: 6px 4px; cursor: pointer;
+            font-size: 11px; font-weight: 700; transition: transform 0.1s, box-shadow 0.1s;
+            display: flex; flex-direction: column; gap: 3px; justify-content: center; height: 100%;
+        }
+        .class-card:hover { transform: scale(1.02); box-shadow: 0 3px 8px rgba(0,0,0,0.12); }
+        .class-card .code-tag { font-size: 10px; opacity: 0.85; font-weight: 600; }
+        .class-card .type-tag { font-size: 10px; font-weight: 800; letter-spacing: 0.5px; }
+        .class-card .location-tag {
+            font-size: 9px; background: rgba(255,255,255,0.75);
+            border-radius: 4px; padding: 1px 4px; margin-top: 2px; color: #2d3748;
+        }
 
-        /* Estilos por tipo */
-        .type-TP { background: var(--color-tp); border-left-color: var(--border-tp); }
-        .type-L { background: var(--color-l); border-left-color: var(--border-l); }
-        .type-FPI { background: var(--color-fpi); border-left-color: var(--border-fpi); }
-        .type-O { background: var(--color-o); border-left-color: var(--border-o); }
-        .type-E { background: var(--color-e); border-left-color: var(--border-e); }
-        .type-AH { background: var(--color-ah); border-left-color: var(--border-ah); }
+        /* Clases CSS aplicadas por MODALIDAD */
+        .mod-tp  { background: var(--bg-tp);  border: 1px solid var(--border-tp);  color: var(--text-tp); }
+        .mod-ah  { background: var(--bg-ah);  border: 1px solid var(--border-ah);  color: var(--text-ah); }
+        .mod-tr  { background: var(--bg-tr);  border: 1px solid var(--border-tr);  color: var(--text-tr); }
+        .mod-e   { background: var(--bg-e);   border: 1px solid var(--border-e);   color: var(--text-e); }
+        .mod-fpi { background: var(--bg-fpi); border: 1px solid var(--border-fpi); color: var(--text-fpi); }
+        .mod-opc { background: var(--bg-opc); border: 1px solid var(--border-opc); color: var(--text-opc); }
 
-        /* Modal (Ventana Emergente de Información) */
-        .modal-backdrop {
+        /* Modal Flotante */
+        .modal-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4); display: none; justify-content: center;
-            align-items: center; z-index: 1000; padding: 20px;
+            background: rgba(0,0,0,0.35); display: none; justify-content: center;
+            align-items: center; z-index: 100; padding: 15px;
         }
         .modal-card {
-            background: white; border-radius: 16px; width: 100%; max-width: 400px;
-            padding: 20px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            animation: popIn 0.2s ease-out;
+            background: white; padding: 20px; border-radius: 12px; width: 100%;
+            max-width: 400px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); border: 2px solid var(--header-bg);
+            max-height: 90vh; overflow-y: auto;
         }
-        @keyframes popIn {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        .modal-head { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 16px; }
-        .modal-row { margin-bottom: 12px; font-size: 14px; display: flex; flex-direction: column; gap: 2px; }
-        .modal-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-        .modal-val { font-size: 14px; font-weight: 600; color: var(--text-dark); }
+        .modal-card h2 { font-size: 17px; color: var(--header-bg); margin-bottom: 12px; }
+        .info-group { margin-bottom: 10px; font-size: 13px; text-align: left; }
+        .info-group span { font-weight: 700; color: #718096; display: block; font-size: 10px; text-transform: uppercase; }
         
+        .location-section {
+            background: #faf8f5; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);
+            margin-top: 10px; margin-bottom: 10px;
+        }
+        .location-section h4 { font-size: 12px; color: #4a5568; margin-bottom: 6px; }
+        .input-row { display: flex; gap: 8px; margin-bottom: 6px; }
+        .input-row input {
+            width: 50%; padding: 6px 8px; border-radius: 6px; border: 1px solid #cbd5e0; font-size: 12px;
+        }
+        
+        .btn-save {
+            width: 100%; padding: 8px; background: #6b5b95; color: white; border: none;
+            border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px; margin-top: 4px;
+        }
         .btn-close {
-            margin-top: 18px; width: 100%; padding: 12px; background: var(--primary);
-            color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;
+            width: 100%; padding: 10px; background: #a29bfe; color: white;
+            border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 8px;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Mi Horario de Clases</h1>
-    <p>Tecnología en Regencia de Farmacia - UIS</p>
-</header>
-
-<div class="agenda-container" id="agenda-list">
-    <!-- Se carga dinámicamente -->
+<div class="title-banner">
+    <h1>Horario Semanal</h1>
+    <p>Tecnología en Regencia de Farmacia — Paleta Pastel Descansada</p>
 </div>
 
-<!-- Modal -->
-<div class="modal-backdrop" id="modal-box">
+<!-- Panel de Convenciones Organizado por Colores y Modalidad -->
+<div class="conventions-panel">
+    <div class="conventions-title">📌 Guía de Colores por Modalidad / Actividad</div>
+    <div class="conventions-grid">
+        <div class="conv-item"><span class="conv-badge badge-tp">TP / L</span> Tutoría / Lab Presencial en U.I.S.</div>
+        <div class="conv-item"><span class="conv-badge badge-ah">AH</span> Aula Híbrida (Asistir a U.I.S.).</div>
+        <div class="conv-item"><span class="conv-badge badge-tr">TR</span> Tutoría Remota (En casa por Zoom).</div>
+        <div class="conv-item"><span class="conv-badge badge-e">E / SS</span> Examen / Evaluación / Sustentación.</div>
+        <div class="conv-item"><span class="conv-badge badge-fpi">FPI</span> Trabajo Colaborativo / Investigación.</div>
+        <div class="conv-item"><span class="conv-badge badge-opc">O1 / O2</span> Actividad Opcional.</div>
+    </div>
+</div>
+
+<div class="table-wrapper">
+    <table id="horario-table">
+        <thead>
+            <tr id="header-row">
+                <th class="time-col">Hora</th>
+            </tr>
+        </thead>
+        <tbody id="body-rows">
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Emergente -->
+<div class="modal-bg" id="modal-box">
     <div class="modal-card">
-        <div class="modal-head" id="m-subject">Materia</div>
+        <h2 id="m-subject">Materia</h2>
+        <div class="info-group"><span>Código:</span><div id="m-code"></div></div>
+        <div class="info-group"><span>Docente:</span><div id="m-teacher"></div></div>
+        <div class="info-group"><span>Fecha:</span><div id="m-date"></div></div>
+        <div class="info-group"><span>Horario:</span><div id="m-time"></div></div>
+        <div class="info-group"><span>Modalidad / Actividad:</span><div id="m-type"></div></div>
         
-        <div class="modal-row">
-            <span class="modal-label">Código de Materia</span>
-            <span class="modal-val" id="m-code">-</span>
-        </div>
-        <div class="modal-row">
-            <span class="modal-label">Docente / Departamento</span>
-            <span class="modal-val" id="m-teacher">-</span>
-        </div>
-        <div class="modal-row">
-            <span class="modal-label">Fecha</span>
-            <span class="modal-val" id="m-date">-</span>
-        </div>
-        <div class="modal-row">
-            <span class="modal-label">Horario</span>
-            <span class="modal-val" id="m-time">-</span>
-        </div>
-        <div class="modal-row">
-            <span class="modal-label">Tipo de Sesión</span>
-            <span class="modal-val" id="m-type">-</span>
+        <div class="location-section">
+            <h4>🏫 Ubicación en Campus</h4>
+            <div class="input-row">
+                <input type="text" id="input-edificio" placeholder="Ej: Edificio Camilo Torres">
+                <input type="text" id="input-aula" placeholder="Ej: Aula 302">
+            </div>
+            <button class="btn-save" onclick="saveLocation()">Guardar Edificio/Aula</button>
         </div>
 
         <button class="btn-close" onclick="closeModal()">Cerrar</button>
@@ -140,108 +198,342 @@
 </div>
 
 <script>
-    // ÚNICAMENTE los días que tienen actividades
-    const diasConClase = [
+    function formatHora12(h) {
+        let period = h >= 12 ? 'PM' : 'AM';
+        let h12 = h % 12;
+        if (h12 === 0) h12 = 12;
+        return `${String(h12).padStart(2, '0')}:00 ${period}`;
+    }
+
+    // Función para determinar el estilo de color según el tipo de sesión
+    function obtenerClaseModalidad(tipo) {
+        if (!tipo) return "mod-tp";
+        const t = tipo.toUpperCase();
+        if (t.includes("E1") || t.includes("E2") || t.startsWith("E ") || t.includes("EXAMEN") || t.includes("SS") || t.includes("ST")) {
+            return "mod-e";
+        }
+        if (t.startsWith("AH")) return "mod-ah";
+        if (t.startsWith("TR") || t.includes("ZOOM")) return "mod-tr";
+        if (t.startsWith("FPI")) return "mod-fpi";
+        if (t.startsWith("O1") || t.startsWith("O2") || t.startsWith("O ")) return "mod-opc";
+        return "mod-tp"; // Por defecto Presencial (TP / L)
+    }
+
+    const diccionarioModalidades = {
+        "TP": "TP: Tutoría presencial en la U.I.S.",
+        "TR": "TR: Tutoría remota en casa por Zoom.",
+        "AH": "AH: Aula híbrida (Ir a la U.I.S.).",
+        "FPI": "FPI: Formación Para la Investigación o Trabajo Colaborativo.",
+        "SS": "SS-ST: Socialización o Sustentación.",
+        "ST": "SS-ST: Socialización o Sustentación.",
+        "E": "E: Examen / Evaluación.",
+        "E1": "E1: Examen / Evaluación.",
+        "E2": "E2: Examen / Evaluación.",
+        "O": "O: Actividad Opcional.",
+        "O1": "O1: Actividad Opcional #1.",
+        "O2": "O2: Actividad Opcional #2.",
+        "L": "Laboratorio Presencial en la U.I.S."
+    };
+
+    function obtenerDescripcionModalidad(tipo) {
+        if (!tipo) return "Sesión Regular";
+        for (let key in diccionarioModalidades) {
+            if (tipo.startsWith(key)) {
+                return `${tipo} → ${diccionarioModalidades[key]}`;
+            }
+        }
+        return tipo;
+    }
+
+    const franjas = [
+        { h: 6,  txt: "06:00 AM - 07:00 AM" },
+        { h: 7,  txt: "07:00 AM - 08:00 AM" },
+        { h: 8,  txt: "08:00 AM - 09:00 AM" },
+        { h: 9,  txt: "09:00 AM - 10:00 AM" },
+        { h: 10, txt: "10:00 AM - 11:00 AM" },
+        { h: 11, txt: "11:00 AM - 12:00 PM" },
+        { h: 12, txt: "12:00 PM - 01:00 PM" },
+        { h: 13, txt: "01:00 PM - 02:00 PM" },
+        { h: 14, txt: "02:00 PM - 03:00 PM" },
+        { h: 15, txt: "03:00 PM - 04:00 PM" },
+        { h: 16, txt: "04:00 PM - 05:00 PM" },
+        { h: 17, txt: "05:00 PM - 06:00 PM" },
+        { h: 19, txt: "07:00 PM - 08:00 PM" },
+        { h: 20, txt: "08:00 PM - 09:00 PM" }
+    ];
+
+    const datosFechas = [
         {
-            fecha: "Sábado, 01 de Agosto",
+            fecha: "Sab 01-Ago",
             clases: [
-                { hora: "06:00 - 08:00", materia: "Química Básica", codigo: "22911", docente: "Departamento de Química", tipo: "TP", sesion: "Tutoría Presencial #1" },
-                { hora: "08:00 - 10:00", materia: "Biología", codigo: "22912", docente: "Escuela de Biología", tipo: "TP", sesion: "Tutoría Presencial #1" }
+                { id: "01ago-27313", hIni: 6, hFin: 8, mat: "QUÍMICA BÁSICA", cod: "27313", prof: "Kathy Milena Orozco Polanco", tipo: "TP" },
+                { id: "01ago-27309", hIni: 8, hFin: 10, mat: "BIOLOGÍA", cod: "27309", prof: "Alba Lucia Arciniegas Vargas", tipo: "TP" }
             ]
         },
         {
-            fecha: "Sábado, 08 de Agosto",
+            fecha: "Sab 08-Ago",
             clases: [
-                { hora: "06:00 - 08:00", materia: "Inglés I", codigo: "22910", docente: "Instituto de Lenguas", tipo: "AH", sesion: "Aula Híbrida #1" },
-                { hora: "08:00 - 10:00", materia: "Química Básica", codigo: "22911", docente: "Departamento de Química", tipo: "TP", sesion: "Tutoría Presencial #2" },
-                { hora: "10:00 - 12:00", materia: "Introducción a la Farmacia", codigo: "22913", docente: "Escuela de Farmacia", tipo: "TP", sesion: "Tutoría Presencial #1" },
-                { hora: "14:00 - 16:00", materia: "Comunicación Oral y Escrita", codigo: "22914", docente: "Departamento de Humanidades", tipo: "AH", sesion: "Aula Híbrida #1" }
+                { id: "08ago-27312", hIni: 6, hFin: 8, mat: "ANTROPOLOGÍA DE LA SALUD", cod: "27312", prof: "Jhon Sebastian Sanchez Alzate", tipo: "TP" },
+                { id: "08ago-27309", hIni: 8, hFin: 10, mat: "BIOLOGÍA", cod: "27309", prof: "Alba Lucia Arciniegas Vargas", tipo: "TP" },
+                { id: "08ago-27316", hIni: 10, hFin: 12, mat: "INTRODUCCIÓN A LA FARMACIA", cod: "27316", prof: "Edilsa Beltran De Cuellar", tipo: "TP" },
+                { id: "08ago-27308", hIni: 14, hFin: 16, mat: "INGLÉS I", cod: "27308", prof: "Bibiana Catherine Figueredo Montana", tipo: "AH" }
             ]
         },
         {
-            fecha: "Sábado, 15 de Agosto",
+            fecha: "Sab 15-Ago",
             clases: [
-                { hora: "06:00 - 08:00", materia: "Inglés I", codigo: "22910", docente: "Instituto de Lenguas", tipo: "AH", sesion: "Aula Híbrida #2" },
-                { hora: "08:00 - 10:00", materia: "Biología", codigo: "22912", docente: "Escuela de Biología", tipo: "TP", sesion: "Tutoría Presencial #2" },
-                { hora: "10:00 - 12:00", materia: "Antropología de la Salud", codigo: "22915", docente: "Departamento de Salud", tipo: "TP", sesion: "Tutoría Presencial #1" },
-                { hora: "14:00 - 16:00", materia: "Comunicación Oral y Escrita", codigo: "22914", docente: "Departamento de Humanidades", tipo: "AH", sesion: "Aula Híbrida #2" }
+                { id: "15ago-27312", hIni: 6, hFin: 8, mat: "ANTROPOLOGÍA DE LA SALUD", cod: "27312", prof: "Jhon Sebastian Sanchez Alzate", tipo: "TP" },
+                { id: "15ago-27316", hIni: 8, hFin: 10, mat: "INTRODUCCIÓN A LA FARMACIA", cod: "27316", prof: "Edilsa Beltran De Cuellar", tipo: "TP" },
+                { id: "15ago-27311", hIni: 10, hFin: 12, mat: "COMUNICACIÓN ORAL Y ESCRITA", cod: "27311", prof: "Lissette Raquel Ramirez Rojas", tipo: "AH" },
+                { id: "15ago-27308", hIni: 14, hFin: 16, mat: "INGLÉS I", cod: "27308", prof: "Bibiana Catherine Figueredo Montana", tipo: "AH" }
             ]
         },
         {
-            fecha: "Sábado, 22 de Agosto",
+            fecha: "Sab 22-Ago",
             clases: [
-                { hora: "06:00 - 10:00", materia: "Laboratorio de Química Básica", codigo: "22911", docente: "Docente Encargado Laboratorio", tipo: "L", sesion: "Laboratorio Presencial #1" },
-                { hora: "10:00 - 12:00", materia: "Inglés I", codigo: "22910", docente: "Instituto de Lenguas", tipo: "AH", sesion: "Aula Híbrida #3" },
-                { hora: "14:00 - 18:00", materia: "Laboratorio de Biología", codigo: "22912", docente: "Docente Encargado Laboratorio", tipo: "L", sesion: "Laboratorio Presencial #1" }
+                { id: "22ago-27309", hIni: 6, hFin: 10, mat: "BIOLOGÍA", cod: "27309", prof: "Alba Lucia Arciniegas Vargas", tipo: "TP" },
+                { id: "22ago-27312", hIni: 10, hFin: 12, mat: "ANTROPOLOGÍA DE LA SALUD", cod: "27312", prof: "Jhon Sebastian Sanchez Alzate", tipo: "TP" },
+                { id: "22ago-27313", hIni: 14, hFin: 18, mat: "QUÍMICA BÁSICA", cod: "27313", prof: "Kathy Milena Orozco Polanco", tipo: "TP" }
             ]
         },
         {
-            fecha: "Sábado, 29 de Agosto",
+            fecha: "Sab 29-Ago",
             clases: [
-                { hora: "06:00 - 08:00", materia: "Química Básica", codigo: "22911", docente: "Departamento de Química", tipo: "TP", sesion: "Tutoría Presencial #3" },
-                { hora: "08:00 - 10:00", materia: "Biología", codigo: "22912", docente: "Escuela de Biología", tipo: "TP", sesion: "Tutoría Presencial #3" },
-                { hora: "10:00 - 12:00", materia: "Formación para la Investigación (FPI)", codigo: "22916", docente: "Coordinación FPI", tipo: "FPI", sesion: "FPI Presencial #1" },
-                { hora: "14:00 - 16:00", materia: "Comunicación Oral y Escrita", codigo: "22914", docente: "Departamento de Humanidades", tipo: "AH", sesion: "Aula Híbrida #4" }
+                { id: "29ago-27309", hIni: 6, hFin: 8, mat: "BIOLOGÍA", cod: "27309", prof: "Alba Lucia Arciniegas Vargas", tipo: "TP" },
+                { id: "29ago-27316", hIni: 8, hFin: 10, mat: "INTRODUCCIÓN A LA FARMACIA", cod: "27316", prof: "Edilsa Beltran De Cuellar", tipo: "TP" },
+                { id: "29ago-27313", hIni: 10, hFin: 12, mat: "QUÍMICA BÁSICA", cod: "27313", prof: "Kathy Milena Orozco Polanco", tipo: "TP" },
+                { id: "29ago-27312", hIni: 14, hFin: 16, mat: "ANTROPOLOGÍA DE LA SALUD", cod: "27312", prof: "Jhon Sebastian Sanchez Alzate", tipo: "TP" },
+                { id: "29ago-27308", hIni: 16, hFin: 18, mat: "INGLÉS I", cod: "27308", prof: "Bibiana Catherine Figueredo Montana", tipo: "AH" }
             ]
         },
         {
-            fecha: "Viernes, 25 de Septiembre",
+            fecha: "Sab 05-Sep",
             clases: [
-                { hora: "19:00 - 20:00", materia: "Orientación Remota", codigo: "22913", docente: "Coordinación de Programa", tipo: "O", sesion: "Sesión Virtual Remota" }
+                { id: "05sep-27309", hIni: 6, hFin: 10, mat: "BIOLOGÍA", cod: "27309", prof: "Alba Lucia Arciniegas Vargas", tipo: "L-Presencial #2" },
+                { id: "05sep-27311", hIni: 10, hFin: 12, mat: "COMUNICACIÓN ORAL Y ESCRITA", cod: "27311", prof: "Lissette Raquel Ramirez Rojas", tipo: "TP #2" },
+                { id: "05sep-27312", hIni: 12, hFin: 14, mat: "ANTROPOLOGÍA DE LA SALUD", cod: "27312", prof: "Jhon Sebastian Sanchez Alzate", tipo: "AH #5" },
+                { id: "05sep-27308", hIni: 14, hFin: 16, mat: "INGLÉS I", cod: "27308", prof: "Bibiana Catherine Figueredo Montana", tipo: "AH #4" },
+                { id: "05sep-27313", hIni: 16, hFin: 18, mat: "QUÍMICA BÁSICA", cod: "27313", prof: "Kathy Milena Orozco Polanco", tipo: "TP #2" }
+            ]
+        },
+        {
+            fecha: "Sab 12-Sep",
+            clases: [
+                { id: "12sep-27316", hIni: 6, hFin: 8, mat: "INTRODUCCIÓN A LA FARMACIA", cod: "27316", prof: "Edilsa Beltran De Cuellar", tipo: "TP #4" },
+                { id: "12sep-27311", hIni: 8, hFin: 10, mat: "COMUNICACIÓN ORAL Y ESCRITA", cod: "27311", prof: "Lissette Raquel Ramirez Rojas", tipo: "TP #3" },
+                { id: "12sep-27309", hIni: 10, hFin: 12, mat: "BIOLOGÍA", cod: "27309", prof: "Alba Lucia Arciniegas Vargas", tipo: "TP #4" },
+                { id: "12sep-27312", hIni: 12, hFin: 14, mat: "ANTROPOLOGÍA DE LA SALUD", cod: "27312", prof: "Jhon Sebastian Sanchez Alzate", tipo: "AH #6" },
+                { id: "12sep-27313", hIni: 14, hFin: 18, mat: "QUÍMICA BÁSICA", cod: "27313", prof: "Kathy Milena Orozco Polanco", tipo: "L-Presencial #2" }
+            ]
+        },
+        {
+            fecha: "Sab 19-Sep",
+            clases: [
+                { id: "19sep-27308", hIni: 6, hFin: 8, mat: "INGLÉS I", cod: "27308", prof: "Bibiana Catherine Figueredo Montana", tipo: "AH #5" },
+                { id: "19sep-27311", hIni: 8, hFin: 10, mat: "COMUNICACIÓN ORAL Y ESCRITA", cod: "27311", prof: "Lissette Raquel Ramirez Rojas", tipo: "TP #4" },
+                { id: "19sep-27312", hIni: 10, hFin: 12, mat: "ANTROPOLOGÍA DE LA SALUD", cod: "27312", prof: "Jhon Sebastian Sanchez Alzate", tipo: "AH #7" },
+                { id: "19sep-27313-e", hIni: 13, hFin: 14, mat: "QUÍMICA BÁSICA", cod: "27313", prof: "Kathy Milena Orozco Polanco", tipo: "E #1" },
+                { id: "19sep-27313-tp", hIni: 14, hFin: 16, mat: "QUÍMICA BÁSICA", cod: "27313", prof: "Kathy Milena Orozco Polanco", tipo: "TP #3" },
+                { id: "19sep-27316", hIni: 16, hFin: 18, mat: "INTRODUCCIÓN A LA FARMACIA", cod: "27316", prof: "Edilsa Beltran De Cuellar", tipo: "TP #5" }
+            ]
+        },
+        {
+            fecha: "Vie 25-Sep",
+            clases: [
+                { id: "25sep-27313", hIni: 19, hFin: 20, mat: "QUÍMICA BÁSICA", cod: "27313", prof: "Kathy Milena Orozco Polanco", tipo: "TR (O-remoto #1)" }
+            ]
+        },
+        {
+            fecha: "Sab 26-Sep",
+            clases: [
+                { id: "26sep-fpi", hIni: 10, hFin: 12, mat: "BIOLOGÍA / QUÍMICA / FARMACIA", cod: "27309", prof: "Varios Docentes", tipo: "FPI-Presencial" },
+                { id: "26sep-27316", hIni: 12, hFin: 14, mat: "INTRODUCCIÓN A LA FARMACIA", cod: "27316", prof: "Edilsa Beltran De Cuellar", tipo: "TP #6" },
+                { id: "26sep-27313", hIni: 14, hFin: 16, mat: "QUÍMICA BÁSICA", cod: "27313", prof: "Kathy Milena Orozco Polanco", tipo: "TP #4" }
+            ]
+        },
+        {
+            fecha: "Sab 03-Oct",
+            clases: [
+                { id: "03oct-27309-l", hIni: 6, hFin: 10, mat: "BIOLOGÍA", cod: "27309", prof: "Alba Lucia Arciniegas Vargas", tipo: "L-Presencial #3" },
+                { id: "03oct-27308", hIni: 10, hFin: 12, mat: "INGLÉS I", cod: "27308", prof: "Bibiana Catherine Figueredo Montana", tipo: "AH (SS-ST #1)" },
+                { id: "03oct-27309-e", hIni: 12, hFin: 13, mat: "BIOLOGÍA", cod: "27309", prof: "Alba Lucia Arciniegas Vargas", tipo: "E #1" },
+                { id: "03oct-27316", hIni: 14, hFin: 16, mat: "INTRODUCCIÓN A LA FARMACIA", cod: "27316", prof: "Edilsa Beltran De Cuellar", tipo: "TP #7" },
+                { id: "03oct-27311", hIni: 16, hFin: 18, mat: "COMUNICACIÓN ORAL Y ESCRITA", cod: "27311", prof: "Lissette Raquel Ramirez Rojas", tipo: "TP #5" }
+            ]
+        },
+        {
+            fecha: "Sab 10-Oct",
+            clases: [
+                { id: "10oct-27311", hIni: 8, hFin: 10, mat: "COMUNICACIÓN ORAL Y ESCRITA", cod: "27311", prof: "Lissette Raquel Ramirez Rojas", tipo: "TP #6" },
+                { id: "10oct-27308", hIni: 12, hFin: 14, mat: "INGLÉS I", cod: "27308", prof: "Bibiana Catherine Figueredo Montana", tipo: "AH (E1 #1)" },
+                { id: "10oct-27313", hIni: 14, hFin: 18, mat: "QUÍMICA BÁSICA", cod: "27313", prof: "Kathy Milena Orozco Polanco", tipo: "L-Presencial #3" }
+            ]
+        },
+        {
+            fecha: "Sab 17-Oct",
+            clases: [
+                { id: "17oct-27311", hIni: 8, hFin: 10, mat: "COMUNICACIÓN ORAL Y ESCRITA", cod: "27311", prof: "Lissette Raquel Ramirez Rojas", tipo: "TP #7" },
+                { id: "17oct-27309", hIni: 12, hFin: 13, mat: "BIOLOGÍA", cod: "27309", prof: "Alba Lucia Arciniegas Vargas", tipo: "O1" },
+                { id: "17oct-27313", hIni: 16, hFin: 18, mat: "QUÍMICA BÁSICA", cod: "27313", prof: "Kathy Milena Orozco Polanco", tipo: "TP #5" }
+            ]
+        },
+        {
+            fecha: "Sab 24-Oct",
+            clases: [
+                { id: "24oct-27309", hIni: 6, hFin: 8, mat: "BIOLOGÍA", cod: "27309", prof: "Alba Lucia Arciniegas Vargas", tipo: "TP #5" },
+                { id: "24oct-27311", hIni: 8, hFin: 10, mat: "COMUNICACIÓN ORAL Y ESCRITA", cod: "27311", prof: "Lissette Raquel Ramirez Rojas", tipo: "TP #8" },
+                { id: "24oct-27308", hIni: 10, hFin: 12, mat: "INGLÉS I", cod: "27308", prof: "Bibiana Catherine Figueredo Montana", tipo: "AH (O1)" },
+                { id: "24oct-27313", hIni: 14, hFin: 18, mat: "QUÍMICA BÁSICA", cod: "27313", prof: "Kathy Milena Orozco Polanco", tipo: "L-Presencial #4" }
+            ]
+        },
+        {
+            fecha: "Sab 31-Oct",
+            clases: [
+                { id: "31oct-27309", hIni: 10, hFin: 14, mat: "BIOLOGÍA", cod: "27309", prof: "Alba Lucia Arciniegas Vargas", tipo: "L-Presencial #4" },
+                { id: "31oct-27311", hIni: 12, hFin: 13, mat: "COMUNICACIÓN ORAL Y ESCRITA", cod: "27311", prof: "Lissette Raquel Ramirez Rojas", tipo: "E #1" },
+                { id: "31oct-27313", hIni: 14, hFin: 16, mat: "QUÍMICA BÁSICA", cod: "27313", prof: "Kathy Milena Orozco Polanco", tipo: "TP #6" },
+                { id: "31oct-27316", hIni: 16, hFin: 18, mat: "INTRODUCCIÓN A LA FARMACIA", cod: "27316", prof: "Edilsa Beltran De Cuellar", tipo: "TP #8" }
+            ]
+        },
+        {
+            fecha: "Sab 07-Nov",
+            clases: [
+                { id: "07nov-27309", hIni: 6, hFin: 8, mat: "BIOLOGÍA", cod: "27309", prof: "Alba Lucia Arciniegas Vargas", tipo: "TP #6" },
+                { id: "07nov-27311", hIni: 12, hFin: 13, mat: "COMUNICACIÓN ORAL Y ESCRITA", cod: "27311", prof: "Lissette Raquel Ramirez Rojas", tipo: "O1" },
+                { id: "07nov-27313", hIni: 16, hFin: 17, mat: "QUÍMICA BÁSICA", cod: "27313", prof: "Kathy Milena Orozco Polanco", tipo: "E #2" }
+            ]
+        },
+        {
+            fecha: "Sab 14-Nov",
+            clases: [
+                { id: "14nov-27309", hIni: 6, hFin: 8, mat: "BIOLOGÍA", cod: "27309", prof: "Alba Lucia Arciniegas Vargas", tipo: "TP #7" },
+                { id: "14nov-fpi", hIni: 8, hFin: 10, mat: "BIOLOGÍA / QUÍMICA / FARMACIA", cod: "27309", prof: "Varios Docentes", tipo: "FPI-Presencial #2 / #3" },
+                { id: "14nov-27316", hIni: 12, hFin: 13, mat: "INTRODUCCIÓN A LA FARMACIA", cod: "27316", prof: "Edilsa Beltran De Cuellar", tipo: "E #1" },
+                { id: "14nov-27313", hIni: 13, hFin: 14, mat: "QUÍMICA BÁSICA", cod: "27313", prof: "Kathy Milena Orozco Polanco", tipo: "O1" }
+            ]
+        },
+        {
+            fecha: "Vie 20-Nov",
+            clases: [
+                { id: "20nov-27316", hIni: 20, hFin: 21, mat: "INTRODUCCIÓN A LA FARMACIA", cod: "27316", prof: "Edilsa Beltran De Cuellar", tipo: "TR (O-remoto #1)" }
+            ]
+        },
+        {
+            fecha: "Sab 21-Nov",
+            clases: [
+                { id: "21nov-27309", hIni: 6, hFin: 7, mat: "BIOLOGÍA", cod: "27309", prof: "Alba Lucia Arciniegas Vargas", tipo: "E #2" }
+            ]
+        },
+        {
+            fecha: "Sab 28-Nov",
+            clases: [
+                { id: "28nov-27309", hIni: 13, hFin: 14, mat: "BIOLOGÍA", cod: "27309", prof: "Alba Lucia Arciniegas Vargas", tipo: "O2" }
             ]
         }
     ];
 
-    function renderAgenda() {
-        const list = document.getElementById("agenda-list");
-        list.innerHTML = "";
+    let claseSeleccionadaId = null;
 
-        diasConClase.forEach(dia => {
-            const card = document.createElement("div");
-            card.className = "day-card";
+    function generarHorario() {
+        const header = document.getElementById("header-row");
+        const body = document.getElementById("body-rows");
 
-            let htmlClases = "";
-            dia.clases.forEach(c => {
-                htmlClases += `
-                    <div class="block-item type-${c.tipo}" onclick='showDetails(${JSON.stringify(c)}, "${dia.fecha}")'>
-                        <div class="block-main">
-                            <span class="block-subject">${c.materia}</span>
-                            <span class="block-sub">${c.sesion}</span>
-                        </div>
-                        <span class="block-time">${c.hora}</span>
-                    </div>
-                `;
+        header.innerHTML = '<th class="time-col">Hora</th>';
+        body.innerHTML = '';
+
+        datosFechas.forEach(d => {
+            const th = document.createElement("th");
+            th.textContent = d.fecha;
+            header.appendChild(th);
+        });
+
+        franjas.forEach((franjaObj) => {
+            const tr = document.createElement("tr");
+            
+            const tdHora = document.createElement("td");
+            tdHora.className = "time-cell";
+            tdHora.textContent = franjaObj.txt;
+            tr.appendChild(tdHora);
+
+            const horaActual = franjaObj.h;
+
+            datosFechas.forEach(d => {
+                const td = document.createElement("td");
+                const clase = d.clases.find(c => horaActual >= c.hIni && horaActual < c.hFin);
+
+                if (clase) {
+                    if (horaActual === clase.hIni) {
+                        const duracion = clase.hFin - clase.hIni;
+                        td.rowSpan = duracion;
+                        
+                        const locGuardada = JSON.parse(localStorage.getItem(`loc_${clase.id}`) || '{}');
+                        let tagUbicacion = '';
+                        if(locGuardada.edificio || locGuardada.aula) {
+                            tagUbicacion = `<div class="location-tag">📍 ${locGuardada.edificio || ''} ${locGuardada.aula || ''}</div>`;
+                        }
+
+                        // Asignar clase de color según el TIPO de modalidad
+                        const modStyleClass = obtenerClaseModalidad(clase.tipo);
+
+                        const card = document.createElement("div");
+                        card.className = `class-card ${modStyleClass}`;
+                        card.innerHTML = `
+                            <span class="type-tag">[${clase.tipo.split(' ')[0]}]</span>
+                            <span>${clase.mat}</span>
+                            ${tagUbicacion}
+                        `;
+                        
+                        const horarioTexto12h = `${formatHora12(clase.hIni)} - ${formatHora12(clase.hFin)}`;
+                        card.onclick = () => openModal(clase, d.fecha, horarioTexto12h);
+                        td.appendChild(card);
+                    } else {
+                        return;
+                    }
+                }
+                tr.appendChild(td);
             });
 
-            card.innerHTML = `
-                <div class="day-title">
-                    <span>📅 ${dia.fecha}</span>
-                    <span class="day-count">${dia.clases.length} clase(s)</span>
-                </div>
-                <div class="blocks-list">
-                    ${htmlClases}
-                </div>
-            `;
-            list.appendChild(card);
+            body.appendChild(tr);
         });
     }
 
-    function showDetails(c, fecha) {
-        document.getElementById("m-subject").textContent = c.materia;
-        document.getElementById("m-code").textContent = c.codigo;
-        document.getElementById("m-teacher").textContent = c.docente;
+    function openModal(c, fecha, horario) {
+        claseSeleccionadaId = c.id;
+
+        document.getElementById("m-subject").textContent = c.mat;
+        document.getElementById("m-code").textContent = c.cod;
+        document.getElementById("m-teacher").textContent = c.prof;
         document.getElementById("m-date").textContent = fecha;
-        document.getElementById("m-time").textContent = c.hora;
-        document.getElementById("m-type").textContent = c.sesion;
+        document.getElementById("m-time").textContent = horario;
+        document.getElementById("m-type").textContent = obtenerDescripcionModalidad(c.tipo);
+
+        const locGuardada = JSON.parse(localStorage.getItem(`loc_${c.id}`) || '{}');
+        document.getElementById("input-edificio").value = locGuardada.edificio || '';
+        document.getElementById("input-aula").value = locGuardada.aula || '';
 
         document.getElementById("modal-box").style.display = "flex";
+    }
+
+    function saveLocation() {
+        if (!claseSeleccionadaId) return;
+
+        const edif = document.getElementById("input-edificio").value.trim();
+        const aula = document.getElementById("input-aula").value.trim();
+
+        const dataToSave = { edificio: edif, aula: aula };
+        localStorage.setItem(`loc_${claseSeleccionadaId}`, JSON.stringify(dataToSave));
+
+        alert("¡Ubicación guardada con éxito!");
+        closeModal();
+        generarHorario();
     }
 
     function closeModal() {
         document.getElementById("modal-box").style.display = "none";
     }
 
-    document.addEventListener("DOMContentLoaded", renderAgenda);
+    document.addEventListener("DOMContentLoaded", generarHorario);
 </script>
+
 </body>
 </html>
